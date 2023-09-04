@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 8px;
+  display: none;
+}
+::-webkit-scrollbar-track {
+  margin-block: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c5cee0;
+  border-radius: 6px;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* INPUT ANAIMATION */
+.dados label {
+  transform-origin: 0 0;
+}
+
+.dados input:focus + label {
+  transform: translateY(-0.6rem) scale(0.8);
+  font-weight: 500;
+}
+
+.dados input:not(:placeholder-shown) + label {
+  transform: translateY(-0.6rem) scale(0.8);
+  font-weight: 500;
+}
+
+/* RADIX SELECT */
+.SelectContent {
+  width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+}
