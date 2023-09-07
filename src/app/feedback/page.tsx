@@ -15,16 +15,30 @@ export default function Feedback() {
           </div>
 
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-semibold">Parabéns, estamos quase lá! </h1>
+            <h1 className="text-3xl font-semibold">
+              Parabéns, estamos quase lá!
+            </h1>
             <p className="text-lg">
-              Nossa IA está verificando as fotos de sua bike, aguarde o nosso retorno via <b>e-mail</b>.
+              Nossa IA está verificando as fotos de sua bike, aguarde o nosso
+              retorno via <b>e-mail</b>.
             </p>
           </div>
         </div>
 
-        <Image src={"/bot-gif.gif"} width={244} height={244} alt="robot gif" className="mx-auto mb-2 sm:mb-0" />
+        <Image
+          src={"/bot-gif.gif"}
+          width={244}
+          height={244}
+          alt="robot gif"
+          className="mx-auto mb-2 sm:mb-0"
+          priority
+        />
 
-        <CustomButton href="/" type="solid" additionalClass="px-12 mx-auto mt-auto w-fit">
+        <CustomButton
+          href="/"
+          type="solid"
+          additionalClass="px-12 mx-auto mt-auto w-fit"
+        >
           Sair
         </CustomButton>
       </div>
