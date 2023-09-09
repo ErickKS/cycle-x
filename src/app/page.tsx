@@ -6,11 +6,11 @@ import { CustomButton } from "@/components/CustomButton";
 export default function Home() {
   return (
     <div className="flex max-w-[498px] justify-center sm:flex-col sm:gap-4">
-      <div className="bg-blue absolute inset-0 -top-8 h-[200px] w-full rounded-[30px] sm:hidden" />
+      <div className="absolute inset-0 -top-8 h-[200px] w-full rounded-[30px] bg-blue sm:hidden" />
 
-      <div className="sm:shadow-main flex flex-col rounded-xl px-6 pb-10 pt-28 sm:gap-10 sm:bg-white sm:p-8 sm:pt-16">
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="shadow-main mb-8 rounded-md bg-white p-5 sm:absolute sm:-top-[114px]">
+      <div className="flex flex-col gap-5 rounded-xl px-6 pb-10 pt-28 sm:gap-10 sm:bg-white sm:p-8 sm:pt-16 sm:shadow-main">
+        <div className="relative z-10 flex flex-col items-center gap-5">
+          <div className="mb-8 rounded-md bg-white p-5 shadow-main sm:absolute sm:-top-[114px]">
             <Image src={"/logo-single.svg"} width={56} height={56} alt="" />
           </div>
 
@@ -25,7 +25,7 @@ export default function Home() {
         <CustomButton
           href="/registro"
           type="solid"
-          additionalClass="px-6 mx-auto mt-auto w-fit"
+          additionalClass="px-6 mx-auto mt-auto mb-10 sm:mb-0 w-fit"
         >
           Começar contratação
         </CustomButton>
