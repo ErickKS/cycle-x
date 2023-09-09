@@ -24,12 +24,12 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .dados input:focus + label {
-  transform: translateY(-0.6rem) scale(0.8);
+  transform: translateY(-0.6rem) translateX(0.1rem) scale(0.8);
   font-weight: 500;
 }
 
 .dados input:not(:placeholder-shown) + label {
-  transform: translateY(-0.6rem) scale(0.8);
+  transform: translateY(-0.6rem) translateX(0.1rem) scale(0.8);
   font-weight: 500;
 }
 

@@ -13,8 +13,9 @@ export function Input({ id, label, required, error, ...props }: InputProps) {
       <div className="dados relative">
         <input
           id={id}
-          placeholder=" "
-          className={`focus:bg-primary-light w-full rounded border-2 px-3 pb-2 pt-6 outline-none ${
+          placeholder=""
+          autoComplete="off"
+          className={`w-full rounded border-2 px-3 pb-2 pt-6 outline-none focus:bg-primary-light ${
             error ? "border-red" : "border-gray-light focus:border-b-primary"
           }`}
           {...props}
@@ -26,13 +27,14 @@ export function Input({ id, label, required, error, ...props }: InputProps) {
           }`}
         >
           {label}
-          {required && "*"}
-        </label>
-      </div>
 
-      {error && (
-        <span className="text-red font-medium capitalize">{error}</span>
-      )}
+          {!required && (
+            <span className="text-sm text-gray/80"> (opcional)</span>
+          )}
+        </label>
+
+        {error && <span className="font-medium text-red">{error}</span>}
+      </div>
     </>
   );
 }
