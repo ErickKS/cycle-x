@@ -5,5 +5,5 @@ export const selectBike = {
 
 export const selectAccessory = {
   placeholder: "Tipo",
-  item: ["Shimano", "Sram", "Topeak", "Blackburn", "Thule"],
+  item: ["Velocímetro digital", "GPS", "Ciclocomputador"],
 };
