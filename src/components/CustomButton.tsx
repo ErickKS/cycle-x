@@ -6,6 +6,7 @@ interface CustomButtonProps {
   children: React.ReactNode;
   type: "solid" | "outline";
   additionalClass?: string;
+  isDisabled?: boolean;
 }
 
 export function CustomButton({
@@ -14,11 +15,9 @@ export function CustomButton({
   children,
   type,
   additionalClass,
-  ...props
+  isDisabled,
 }: CustomButtonProps) {
-  if (additionalClass === undefined) {
-    additionalClass = "";
-  }
+  if (additionalClass === undefined) additionalClass = "";
 
   if (href) {
     return (
@@ -28,12 +27,11 @@ export function CustomButton({
           flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
           ${
             type === "solid"
-              ? "bg-primary hover:bg-primary-dark focus:bg-primary-dark text-white"
-              : "border-primary text-primary hover:bg-primary/10 focus:bg-primary/10 border-2 bg-transparent"
+              ? "bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark"
+              : "border-2 border-primary bg-transparent text-primary hover:bg-primary/10 focus:bg-primary/10"
           }
           ${additionalClass}
         `}
-        {...props}
       >
         {children}
       </Link>
@@ -44,16 +42,16 @@ export function CustomButton({
     return (
       <button
         onClick={onClick}
+        disabled={isDisabled}
         className={`
-          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
+          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition disabled:cursor-not-allowed disabled:bg-primary-dark
           ${
             type === "solid"
-              ? "bg-primary hover:bg-primary-dark focus:bg-primary-dark text-white"
-              : "border-primary text-primary hover:bg-primary/10 focus:bg-primary/10 border-2 bg-transparent"
+              ? "bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark"
+              : "border-2 border-primary bg-transparent text-primary hover:bg-primary/10 focus:bg-primary/10"
           }
           ${additionalClass}
         `}
-        {...props}
       >
         {children}
       </button>

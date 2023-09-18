@@ -11,7 +11,7 @@ export function StepCard({ to, completed, title }: StepCardProps) {
   return (
     <Link
       href={`/registro/${to}`}
-      className="border-gray-light hover:border-primary focus:border-primary flex items-center gap-3 rounded-md border-2 bg-[#FAFCF9] px-3 py-5 transition"
+      className="flex items-center gap-3 rounded-md border-2 border-gray-light bg-[#FAFCF9] px-3 py-5 outline-none transition hover:border-primary focus:border-primary"
     >
       <div>
         {!completed ? (
@@ -24,7 +24,7 @@ export function StepCard({ to, completed, title }: StepCardProps) {
       <span className="w-full text-lg">{title}</span>
 
       <div>
-        <ChevronRight />
+        <ChevronRight className="stroke-gray/90" />
       </div>
     </Link>
   );

@@ -24,6 +24,7 @@ const config: Config = {
       transparent: "transparent",
     },
     screens: {
+      xs: "280px",
       sm: "464px",
       md: "864px",
     },

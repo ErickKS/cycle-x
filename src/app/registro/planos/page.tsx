@@ -1,13 +1,50 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState, ChangeEvent, KeyboardEvent } from "react";
 import { Bike, Crown, Medal } from "lucide-react";
+
+import { useRegister } from "@/hooks/useRegister";
+import { Plan } from "@/contexts/RegisterContext";
 
 import { Banner } from "@/components/Banner";
 import { CustomRadioSelect } from "@/components/CustomRadioSelect";
 import { Actions } from "@/patterns/Actions";
 
 export default function Planos() {
-  function handleSelectedPlan() {}
+  const { plan, updatePlanData } = useRegister();
+  const [selectedPlan, setSelectedPlan] = useState<string>(plan.name);
+  const [alertPlan, activeAlertPlan] = useState(false);
+
+  const router = useRouter();
+
+  function handleRadioChange(event: ChangeEvent<HTMLInputElement>) {
+    if (alertPlan) activeAlertPlan(false);
+    setSelectedPlan(event.target.value);
+  }
+
+  function handleRadioKeyPress(event: KeyboardEvent<HTMLLabelElement>) {
+    const { currentTarget, key } = event;
+    const input = currentTarget.querySelector("input");
+    if (input && (key === " " || key === "Enter")) {
+      setSelectedPlan(input.value);
+    }
+  }
+
+  function handleRadioAlert() {
+    activeAlertPlan(true);
+  }
+
+  function handleSelectedPlan() {
+    if (!selectedPlan) handleRadioAlert();
+
+    if (selectedPlan) {
+      const newPlanData: Plan = { name: selectedPlan };
+      updatePlanData(newPlanData);
+
+      router.push("/registro");
+    }
+  }
 
   return (
     <>
@@ -18,33 +55,49 @@ export default function Planos() {
 
       <div className="flex flex-col gap-4">
         <CustomRadioSelect
-          checked
-          id="teste"
+          id="pedal-essencial"
+          name="plans"
           icon={Bike}
           title="Pedal Essencial"
           text="O plano gratuito você pode experimentar um dos serviços essenciais oferecidos."
+          onChange={handleRadioChange}
+          onKeyDown={handleRadioKeyPress}
+          checked={selectedPlan === "pedal-essencial"}
+          alert={alertPlan}
         />
         <CustomRadioSelect
-          id="teste2"
+          id="pedal-leve"
+          name="plans"
           icon={Medal}
           title="Pedal Leve"
           text="Para você que gosta de pedalar e está buscando um plano de serviços intermediário"
+          onChange={handleRadioChange}
+          onKeyDown={handleRadioKeyPress}
+          checked={selectedPlan === "pedal-leve"}
+          alert={alertPlan}
         />
         <CustomRadioSelect
-          id="teste3"
+          id="pedal-elite"
+          name="plans"
           icon={Crown}
           title="Pedal Elite"
           text="Conte com diversos serviços capazes de elevar suas aventuras para o próximo nível."
+          onChange={handleRadioChange}
+          onKeyDown={handleRadioKeyPress}
+          checked={selectedPlan === "pedal-elite"}
+          alert={alertPlan}
         />
+
         <a
           href="/"
           className="inline text-center font-medium text-primary underline outline-primary"
+          target="_blank"
         >
           Saiba mais sobre nossos planos aqui!
         </a>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="xs:grid-cols-2 grid gap-4">
         <Actions onStepCompletion={handleSelectedPlan} />
       </div>
     </>

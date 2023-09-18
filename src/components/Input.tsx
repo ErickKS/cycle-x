@@ -1,21 +1,30 @@
-import { InputHTMLAttributes } from "react";
+import { ComponentProps } from "react";
 
-interface InputProps extends InputHTMLAttributes<HTMLElement> {
+interface InputProps extends ComponentProps<"input"> {
   id: string;
   label: string;
-  error?: string;
+  value: string | number | undefined;
+  error?: boolean | string;
   required?: boolean;
 }
 
-export function Input({ id, label, required, error, ...props }: InputProps) {
+export function Input({
+  id,
+  label,
+  value,
+  required,
+  error,
+  ...props
+}: InputProps) {
   return (
     <>
       <div className="dados relative">
         <input
           id={id}
           placeholder=""
+          value={value}
           autoComplete="off"
-          className={`w-full rounded border-2 px-3 pb-2 pt-6 outline-none focus:bg-primary-light ${
+          className={`w-full rounded border-2 px-3 pb-2 pt-6 font-medium outline-none focus:bg-primary-light ${
             error ? "border-red" : "border-gray-light focus:border-b-primary"
           }`}
           {...props}

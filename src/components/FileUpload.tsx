@@ -1,38 +1,41 @@
-"use client";
-
-import { Trash2, UploadCloud } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, KeyboardEvent } from "react";
+import { Trash2 } from "lucide-react";
+import Image from "next/image";
 
 interface FileUploadProps {
   id: string;
+  file: { name: string };
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onDeleteFile: () => void;
+  alert: boolean;
 }
 
-interface FileProps {
-  name: string;
-  size: number;
-  type: string;
-}
+export function FileUpload({
+  id,
+  file,
+  onChange,
+  onDeleteFile,
+  alert,
+}: FileUploadProps) {
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
 
-export function FileUpload({ id }: FileUploadProps) {
-  const [file, setFile] = useState<FileProps | null>(null);
-
-  function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files) return;
-
-    setFile(e.target.files[0]);
-  }
-
-  function handleDeleteFileUploaded() {
-    setFile(null);
+  function handleLabelKeyDown(event: KeyboardEvent<HTMLLabelElement>) {
+    if (event.key === "Enter" && inputFileRef.current) {
+      inputFileRef.current.click();
+    }
   }
 
   return (
     <div className="group relative flex flex-col gap-2">
       <label
         htmlFor={id}
-        className="border-primary hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light flex h-[147px] w-full max-w-[434px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 px-2 transition"
+        className={`flex w-full max-w-[434px] cursor-pointer flex-col items-center justify-center gap-2 rounded border-2 px-2 py-2 transition hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light ${
+          alert ? "border-red" : "border-primary"
+        }`}
+        tabIndex={1}
+        onKeyDown={handleLabelKeyDown}
       >
-        <UploadCloud />
+        <Image src={`/bike-${id}.svg`} height={90} width={148.19} alt="" />
 
         <span className="text-center text-lg font-medium">
           Anexe o arquivo para envio
@@ -43,15 +46,16 @@ export function FileUpload({ id }: FileUploadProps) {
         type="file"
         name={id}
         id={id}
+        onChange={onChange}
         className="invisible absolute inset-0 cursor-pointer opacity-0"
-        onChange={handleFileUpload}
+        ref={inputFileRef}
       />
 
-      {file && (
-        <div className="bg-primary-light flex w-full max-w-[434px] items-center justify-between rounded-lg px-4 py-3">
+      {file.name && (
+        <div className="flex w-full max-w-[434px] items-center justify-between rounded bg-primary-light px-4 py-3">
           <span className="text-sm font-medium">{file.name}</span>
 
-          <button onClick={handleDeleteFileUploaded}>
+          <button onClick={onDeleteFile}>
             <Trash2 />
           </button>
         </div>

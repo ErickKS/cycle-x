@@ -1,33 +1,45 @@
-import { ElementType, InputHTMLAttributes } from "react";
+import { ElementType, InputHTMLAttributes, KeyboardEvent } from "react";
 
 interface CustomRadioSelectProps extends InputHTMLAttributes<HTMLElement> {
   id: string;
+  name: string;
   icon: ElementType;
   title: string;
   text: string;
+  checked: boolean;
+  onKeyDown: (event: KeyboardEvent<HTMLLabelElement>) => void;
+  alert?: boolean;
 }
-
-// INPUT TYPE RADIO ERROR ==> REACT BUG
 
 export function CustomRadioSelect({
   id,
   icon: Icon,
+  name,
   title,
   text,
-  ...rest
+  checked,
+  onKeyDown,
+  alert,
+  ...props
 }: CustomRadioSelectProps) {
   return (
-    <label className="border-gray-light hover:bg-primary-light focus:bg-primary-light active:border-primary active:bg-primary-light flex cursor-pointer flex-col rounded border-2 px-6 py-5 transition">
+    <label
+      tabIndex={1}
+      className={`animate-alert flex cursor-pointer flex-col rounded border-2 px-6 py-5 outline-none transition hover:bg-primary-light focus:bg-primary-light ${
+        checked ? "border-primary bg-primary-light" : "border-gray-light"
+      } ${alert && "border-red/70"}`}
+      onKeyDown={onKeyDown}
+    >
       <input
         type="radio"
-        name={id}
+        name={name}
         id={id}
         value={id}
         className="appearance-none"
-        {...rest}
+        {...props}
       />
 
-      <Icon className="stroke-gray h-7 w-7" />
+      <Icon className="h-7 w-7 stroke-gray" />
 
       <div className="mt-3 space-y-1">
         <h2 className="text-xl font-semibold">{title}</h2>
