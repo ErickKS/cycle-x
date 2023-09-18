@@ -32,7 +32,7 @@ export default function Fotos() {
           <FileUpload id="file4" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-medium">Foto do número de série*</h2>
+          <h2 className="text-lg font-medium">Foto do número de série</h2>
           <FileUpload id="file5" />
         </div>
       </div>
