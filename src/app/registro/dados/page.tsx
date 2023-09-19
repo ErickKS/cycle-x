@@ -45,7 +45,7 @@ export default function Dados() {
 
       if (!values.tel) {
         errors.tel = "Campo obrigatório";
-      } else if (!/^[1-9]{2} ?9?[6-9][0-9]{3}[0-9]{4}$/i.test(values.tel)) {
+      } else if (!/\(\d{2}\) \d{5}-\d{4}$/i.test(values.tel)) {
         errors.tel = "Por favor, insira um telefone válido";
       }
 
@@ -91,9 +91,40 @@ export default function Dados() {
 
       if (!values.city) errors.city = "Campo obrigatório";
 
+      const ufs = [
+        "AC",
+        "AL",
+        "AP",
+        "AM",
+        "BA",
+        "CE",
+        "DF",
+        "ES",
+        "GO",
+        "MA",
+        "MT",
+        "MS",
+        "MG",
+        "PA",
+        "PB",
+        "PR",
+        "PE",
+        "PI",
+        "RJ",
+        "RN",
+        "RS",
+        "RO",
+        "RR",
+        "SC",
+        "SP",
+        "SE",
+        "TO",
+      ];
       if (!values.uf) {
         errors.uf = "Campo obrigatório";
       } else if (!/^[A-Z]{2}$/i.test(values.uf)) {
+        errors.uf = "Por favor, insira uma UF válida";
+      } else if (!ufs.includes(values.uf)) {
         errors.uf = "Por favor, insira uma UF válida";
       }
 
@@ -108,7 +139,7 @@ export default function Dados() {
     (error) => !error,
   );
 
-  // ========== ADDRESS
+  // =========  = ADDRESS
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "edit" | null>(null);
   const [addressAlert, setAddressAlert] = useState(false);
@@ -169,6 +200,13 @@ export default function Dados() {
                 error={
                   validationUser.touched[field] && validationUser.errors[field]
                 }
+                mask={
+                  input.id === "tel"
+                    ? "(99) 99999-9999"
+                    : input.id === "cpf"
+                    ? "999.999.999-99"
+                    : ""
+                }
                 required
               />
             ) : null;
@@ -224,6 +262,13 @@ export default function Dados() {
                     validationAddress.touched[field] &&
                     validationAddress.errors[field]
                   }
+                  mask={
+                    input.id === "cep"
+                      ? "99999-999"
+                      : input.id === "uf"
+                      ? "**"
+                      : ""
+                  }
                   required={input.id !== "comp"}
                 />
               ) : null;
@@ -232,7 +277,7 @@ export default function Dados() {
         </div>
       </div>
 
-      <div className="xs:grid-cols-2 grid gap-4">
+      <div className="grid gap-4 xs:grid-cols-2">
         <Actions onStepCompletion={handleClientDocs} />
       </div>
     </>

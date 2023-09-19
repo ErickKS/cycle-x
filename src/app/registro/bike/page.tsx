@@ -387,7 +387,7 @@ export default function Bike() {
         </div>
       </div>
 
-      <div className="xs:grid-cols-2 grid gap-4">
+      <div className="grid gap-4 xs:grid-cols-2">
         <Actions onStepCompletion={handleBikeDocs} />
       </div>
     </>

@@ -1,8 +1,11 @@
-import { ComponentProps } from "react";
+import { ComponentProps, FocusEvent } from "react";
+// @ts-ignore
+import InputMask from "react-input-mask";
 
 interface InputProps extends ComponentProps<"input"> {
   id: string;
   label: string;
+  mask?: string;
   value: string | number | undefined;
   error?: boolean | string;
   required?: boolean;
@@ -11,22 +14,33 @@ interface InputProps extends ComponentProps<"input"> {
 export function Input({
   id,
   label,
+  mask,
   value,
   required,
   error,
   ...props
 }: InputProps) {
+  function valueVerification(event: FocusEvent<HTMLInputElement>) {
+    const inputValue = event.target.value;
+
+    if (!inputValue) value = "";
+  }
+
   return (
     <>
       <div className="dados relative">
-        <input
+        <InputMask
           id={id}
-          placeholder=""
+          placeholder=" "
           value={value}
           autoComplete="off"
-          className={`w-full rounded border-2 px-3 pb-2 pt-6 font-medium outline-none focus:bg-primary-light ${
-            error ? "border-red" : "border-gray-light focus:border-b-primary"
-          }`}
+          className={`
+            w-full rounded border-2 px-3 pb-2 pt-6 font-medium outline-none focus:bg-primary-light
+            ${error ? "border-red" : "border-gray-light focus:border-b-primary"}
+            ${id === "uf" && "uppercase"}
+          `}
+          mask={mask}
+          onBlur={valueVerification}
           {...props}
         />
         <label
