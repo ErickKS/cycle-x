@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${inter.className} sm:bg-gradient grid min-h-screen sm:place-content-center sm:bg-fixed`}
+        className={`${inter.className} grid min-h-screen sm:place-content-center sm:bg-gradient sm:bg-fixed`}
       >
         {children}
       </body>

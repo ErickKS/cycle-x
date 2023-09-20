@@ -5,14 +5,17 @@ import { Check } from "lucide-react";
 
 interface CheckBoxProps {
   checked: boolean;
+  alert?: boolean;
   onCheckedChange: (checked: boolean | "indeterminate") => void;
 }
 
-export function CheckBox({ checked, onCheckedChange }: CheckBoxProps) {
+export function CheckBox({ checked, alert, onCheckedChange }: CheckBoxProps) {
   return (
     <div className="flex gap-2">
       <Checkbox.Root
-        className="group relative top-0.5 flex h-5 min-w-[20px] items-center justify-center rounded bg-gray-light/70 data-[state=checked]:bg-primary "
+        className={`group relative top-0.5 flex h-5 min-w-[20px] items-center justify-center rounded border-2 bg-gray-light/70 data-[state=checked]:bg-primary ${
+          alert ? "border-red" : "border-transparent"
+        }`}
         id="terms"
         checked={checked}
         onCheckedChange={onCheckedChange}

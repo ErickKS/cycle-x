@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRegister } from "@/hooks/useRegister";
 
 import { StepCard } from "@/components/StepCard";
@@ -14,8 +14,14 @@ export default function Registro() {
 
   const router = useRouter();
 
-  const [disabledAttribute, setDisabledAttribute] = useState(true);
+  const [stepAlert, setStepAlert] = useState({
+    user: false,
+    bike: false,
+    plan: false,
+    photos: false,
+  });
   const [termsCheck, setTermsCheck] = useState(false);
+  const [termsAlert, setTermsAlert] = useState(false);
 
   const isValidUser = Object.values(user).every((value) => !!value);
 
@@ -31,22 +37,42 @@ export default function Registro() {
     Object.values(value).every((value2) => !!value2),
   );
 
-  const isCompletedDadosStep = isValidUser && isValidAddress;
+  const isCompletedUserStep = isValidUser && isValidAddress;
   const isCompletedBikeStep = isValidBike;
   const isCompletedPlanStep = isValidPlan;
   const isCompletedPhotosStep = isValidPhotos;
 
-  useEffect(() => {
-    if (isCompletedDadosStep && isCompletedBikeStep && isCompletedPlanStep && isCompletedPhotosStep && termsCheck) {
-      setDisabledAttribute(false);
-    } else {
-      setDisabledAttribute(true);
-    }
-  }, [isCompletedDadosStep, isCompletedBikeStep, isCompletedPlanStep, isCompletedPhotosStep, termsCheck,
-  ]);
+  function handleStepsAlerts(step: string) {
+    setStepAlert((stepAlert) => ({
+      ...stepAlert,
+      [step]: true,
+    }));
+  }
+
+  function handleTerms() {
+    setTermsCheck(!termsCheck);
+    setTermsAlert(false);
+  }
 
   function handleRegistration() {
-    router.push("/feedback");
+    if (!isCompletedUserStep) handleStepsAlerts("user");
+    if (!isCompletedBikeStep) handleStepsAlerts("bike");
+    if (!isCompletedPlanStep) handleStepsAlerts("plan");
+    if (!isCompletedPhotosStep) handleStepsAlerts("photos");
+
+    if (!termsCheck) {
+      setTermsAlert(true);
+    }
+
+    if (
+      termsCheck &&
+      isCompletedUserStep &&
+      isCompletedBikeStep &&
+      isCompletedPlanStep &&
+      isCompletedPhotosStep
+    ) {
+      router.push("/feedback");
+    }
   }
 
   return (
@@ -59,35 +85,39 @@ export default function Registro() {
       <div className="space-y-4">
         <StepCard
           to="dados"
-          completed={isCompletedDadosStep}
+          completed={isCompletedUserStep}
           title="Dados cadastrais"
+          alert={stepAlert.user}
         />
         <StepCard
           to="bike"
           completed={isCompletedBikeStep}
           title="Sua bike"
+          alert={stepAlert.bike}
         />
         <StepCard
           to="planos"
           completed={isCompletedPlanStep}
           title="Escolha de plano"
+          alert={stepAlert.plan}
         />
         <StepCard
           to="fotos"
           completed={isCompletedPhotosStep}
           title="Envio de fotos"
+          alert={stepAlert.photos}
         />
       </div>
 
       <div className="space-y-4">
         <CheckBox
           checked={termsCheck}
-          onCheckedChange={() => setTermsCheck(!termsCheck)}
+          alert={termsAlert}
+          onCheckedChange={handleTerms}
         />
 
         <CustomButton
           type="solid"
-          isDisabled={disabledAttribute}
           onClick={handleRegistration}
           additionalClass="w-full py-3"
         >

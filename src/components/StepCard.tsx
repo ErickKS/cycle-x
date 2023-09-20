@@ -1,17 +1,20 @@
-import { CheckCircle2, ChevronRight, Circle } from "lucide-react";
 import Link from "next/link";
+import { CheckCircle2, ChevronRight, Circle } from "lucide-react";
 
 interface StepCardProps {
   to: string;
   completed: boolean;
   title: string;
+  alert: boolean;
 }
 
-export function StepCard({ to, completed, title }: StepCardProps) {
+export function StepCard({ to, completed, title, alert }: StepCardProps) {
   return (
     <Link
       href={`/registro/${to}`}
-      className="flex items-center gap-3 rounded-md border-2 border-gray-light bg-[#FAFCF9] px-3 py-5 outline-none transition hover:border-primary focus:border-primary"
+      className={`flex items-center gap-3 rounded-md border-2 bg-[#FAFCF9] px-3 py-5 outline-none transition hover:border-primary focus:border-primary
+        ${alert ? "border-red" : "border-gray-light"}
+      `}
     >
       <div>
         {!completed ? (

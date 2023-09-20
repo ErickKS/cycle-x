@@ -6,7 +6,6 @@ interface CustomButtonProps {
   children: React.ReactNode;
   type: "solid" | "outline";
   additionalClass?: string;
-  isDisabled?: boolean;
 }
 
 export function CustomButton({
@@ -15,7 +14,6 @@ export function CustomButton({
   children,
   type,
   additionalClass,
-  isDisabled,
 }: CustomButtonProps) {
   if (additionalClass === undefined) additionalClass = "";
 
@@ -42,9 +40,8 @@ export function CustomButton({
     return (
       <button
         onClick={onClick}
-        disabled={isDisabled}
         className={`
-          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition disabled:cursor-not-allowed disabled:bg-primary-dark
+          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
           ${
             type === "solid"
               ? "bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark"
