@@ -122,9 +122,9 @@ export default function Dados() {
       ];
       if (!values.uf) {
         errors.uf = "Campo obrigatório";
-      } else if (!/^[A-Z]{2}$/i.test(values.uf)) {
+      } else if (!/^[A-Za-z]{2}$/i.test(values.uf)) {
         errors.uf = "Por favor, insira uma UF válida";
-      } else if (!ufs.includes(values.uf)) {
+      } else if (!ufs.includes(values.uf.toUpperCase())) {
         errors.uf = "Por favor, insira uma UF válida";
       }
 
