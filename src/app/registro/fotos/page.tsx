@@ -10,9 +10,12 @@ import { Banner } from "@/components/Banner";
 import { FileUpload } from "@/components/FileUpload";
 import { Actions } from "@/patterns/Actions";
 import { uploadFilesComponents } from "@/constants/uploadFiles";
+import { Toast } from "@/components/Toast";
 
 export default function Foto() {
   const { photos, updatePhotosData } = useRegister();
+
+  const [toastActive, setToastActive] = useState(false);
   const [validationClicked, setValidationClicked] = useState(false);
 
   const router = useRouter();
@@ -56,6 +59,11 @@ export default function Foto() {
     return true;
   }
 
+  function handleToast() {
+    setToastActive(false);
+    setTimeout(() => setToastActive(true), 100);
+  }
+
   function handleBikePhotos() {
     setValidationClicked(true);
 
@@ -63,6 +71,7 @@ export default function Foto() {
 
     if (isAllPhotosFilled) router.push("/registro");
   }
+
 
   return (
     <>
@@ -98,7 +107,7 @@ export default function Foto() {
         })}
       </div>
 
-      <div className="xs:grid-cols-2 grid gap-4">
+      <div className="grid gap-4 xs:grid-cols-2">
         <Actions onStepCompletion={handleBikePhotos} />
       </div>
     </>
