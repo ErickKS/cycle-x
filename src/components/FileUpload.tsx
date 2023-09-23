@@ -25,11 +25,24 @@ export function FileUpload({
     }
   }
 
+  function shortenFileName(fileName: string) {
+    const maxLength = 15; // tamanho do nome
+
+    if (fileName.length > maxLength) {
+      const shortenedFileName = fileName.substring(0, maxLength);
+      const finalFileName = shortenedFileName + "...";
+
+      return <span>{finalFileName}</span>;
+    }
+
+    return <span>{fileName}</span>;
+  }
+
   return (
     <div className="group relative flex flex-col gap-2">
       <label
         htmlFor={id}
-        className={`flex w-full max-w-[434px] cursor-pointer flex-col items-center justify-center gap-2 rounded border-2 px-2 py-2 transition hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light ${
+        className={`flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded border-2 px-2 py-2 transition hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light ${
           alert ? "border-red" : "border-primary"
         }`}
         tabIndex={1}
@@ -52,8 +65,10 @@ export function FileUpload({
       />
 
       {file.name && (
-        <div className="flex w-full max-w-[434px] items-center justify-between rounded bg-primary-light px-4 py-3">
-          <span className="text-sm font-medium">{file.name}</span>
+        <div className="flex w-full items-center justify-between rounded bg-primary-light px-4 py-3">
+          <span className="text-sm font-medium">
+            {shortenFileName(file.name)}
+          </span>
 
           <button onClick={onDeleteFile}>
             <Trash2 />
