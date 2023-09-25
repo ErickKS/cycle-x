@@ -18,7 +18,20 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-/* INPUT ANAIMATION */
+/* CAMERA ALERT ANIMATION */
+
+.alert__container {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* INPUT ANIMATION */
 .dados label {
   transform-origin: 0 0;
 }
