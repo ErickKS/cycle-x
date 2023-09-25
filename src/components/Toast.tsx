@@ -16,9 +16,9 @@ export function Toast({ open, onOpenChange, alert }: ToastProps) {
         <ToastPrimitive.Root
           open={open}
           onOpenChange={onOpenChange}
-          className="-ml-4 px-4 data-[state=closed]:animate-hide data-[state=open]:animate-slideIn sm:-ml-6 sm:px-6 md:px-4"
+          className="-ml-4 px-4 outline-none data-[state=closed]:animate-hide data-[state=open]:animate-slideIn sm:-ml-6 sm:px-6 md:px-4 "
         >
-          <div className="grid w-full max-w-[450px] grid-cols-[24px_1fr] items-center gap-2 rounded-xl border-2 border-red bg-[#EABCC4] px-4 py-3 shadow shadow-red/50 sm:px-6">
+          <div className="grid w-full max-w-[450px] grid-cols-[24px_1fr] items-center gap-2 rounded-xl border-2 border-red bg-[#EABCC4] px-4 py-3 shadow shadow-red/50">
             <AlertOctagon className="stroke-red" />
 
             <ToastPrimitive.Description asChild>

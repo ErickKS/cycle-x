@@ -1,67 +1,43 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
+import { Photos } from "@/contexts/RegisterContext";
 import { useRegister } from "@/hooks/useRegister";
-import { Photo, Photos } from "@/contexts/RegisterContext";
 
 import { Banner } from "@/components/Banner";
 import { FileUpload } from "@/components/FileUpload";
-import { Actions } from "@/patterns/Actions";
-import { uploadFilesComponents } from "@/constants/uploadFiles";
 import { Toast } from "@/components/Toast";
+import { Actions } from "@/patterns/Actions";
+
+import { uploadFilesComponents } from "@/constants/uploadFiles";
 
 export default function Foto() {
-  const { photos, updatePhotosData } = useRegister();
+  const { photos } = useRegister();
 
   const [toastActive, setToastActive] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [validationClicked, setValidationClicked] = useState(false);
 
   const router = useRouter();
 
-  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    const { files, name } = event.target;
-    if (!files) return;
-
-    const newPhotoData: Photo = {
-      name: files[0].name,
-      size: files[0].size,
-      type: files[0].type,
-    };
-
-    updatePhotosData({
-      ...photos,
-      [name]: newPhotoData,
-    });
-  }
-
-  function handleDeleteFileUploaded(photo: string) {
-    const deletedPhoto: Photo = {
-      name: "",
-      size: "",
-      type: "",
-    };
-
-    updatePhotosData({
-      ...photos,
-      [photo as keyof Photos]: deletedPhoto,
-    });
-  }
-
-  function areAllPhotosFilled(photos: Photos): boolean {
-    for (const key in photos) {
-      const photo = photos[key as keyof Photos];
-      if (!photo.name || !photo.size || !photo.type) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   function handleToast() {
     setToastActive(false);
     setTimeout(() => setToastActive(true), 100);
+  }
+
+  function areAllPhotosFilled(photos: Photos): boolean {
+    const isReadyToSave = Object.values(photos).every(
+      (photo) => photo.status === "valid",
+    );
+
+    setToastMessage(
+      "Certifique-se de que todas as fotos estejam anexadas e válidas.",
+    );
+    handleToast();
+
+    return isReadyToSave;
   }
 
   function handleBikePhotos() {
@@ -72,13 +48,12 @@ export default function Foto() {
     if (isAllPhotosFilled) router.push("/registro");
   }
 
-
   return (
     <>
       <div className="flex flex-col gap-1">
         <Banner
           title="Envie as fotos da bike"
-          text="Tire ou anexe fotos da sua bike para nossa IA analisá-las."
+          text="Tire as fotos da sua bike para nossa IA analisá-las."
         />
 
         <span className="text-sm font-semibold text-red">
@@ -94,17 +69,24 @@ export default function Foto() {
               <h2 className="text-lg font-medium">{label}</h2>
 
               <FileUpload
-                id={id}
-                file={photos[id as keyof Photos]}
-                onChange={handleFileChange}
-                onDeleteFile={() => handleDeleteFileUploaded(id)}
+                category={id as keyof Photos}
                 alert={
-                  validationClicked && photos[id as keyof Photos].name === ""
+                  validationClicked &&
+                  (photos[id as keyof Photos].status === "waiting" ||
+                    photos[id as keyof Photos].status === "invalid")
                 }
               />
             </div>
           );
         })}
+      </div>
+
+      <div className="right-1/5 -translate-x-1/5 fixed top-0 pt-4 md:right-0">
+        <Toast
+          open={toastActive}
+          onOpenChange={() => setToastActive(!toastActive)}
+          alert={toastMessage}
+        />
       </div>
 
       <div className="grid gap-4 xs:grid-cols-2">

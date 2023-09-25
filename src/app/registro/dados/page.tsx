@@ -69,11 +69,7 @@ export default function Dados() {
     validate: (values) => {
       const errors: { [key: string]: string } = {
         cep: "",
-        address: "",
         number: "",
-        neighborhood: "",
-        city: "",
-        uf: "",
         comp: "",
       };
 
@@ -83,50 +79,7 @@ export default function Dados() {
         errors.cep = "Por favor, insira um CEP válido";
       }
 
-      if (!values.address) errors.address = "Campo obrigatório";
-
       if (!values.number) errors.number = "Campo obrigatório";
-
-      if (!values.neighborhood) errors.neighborhood = "Campo obrigatório";
-
-      if (!values.city) errors.city = "Campo obrigatório";
-
-      const ufs = [
-        "AC",
-        "AL",
-        "AP",
-        "AM",
-        "BA",
-        "CE",
-        "DF",
-        "ES",
-        "GO",
-        "MA",
-        "MT",
-        "MS",
-        "MG",
-        "PA",
-        "PB",
-        "PR",
-        "PE",
-        "PI",
-        "RJ",
-        "RN",
-        "RS",
-        "RO",
-        "RR",
-        "SC",
-        "SP",
-        "SE",
-        "TO",
-      ];
-      if (!values.uf) {
-        errors.uf = "Campo obrigatório";
-      } else if (!/^[A-Za-z]{2}$/i.test(values.uf)) {
-        errors.uf = "Por favor, insira uma UF válida";
-      } else if (!ufs.includes(values.uf.toUpperCase())) {
-        errors.uf = "Por favor, insira uma UF válida";
-      }
 
       return errors;
     },
@@ -262,13 +215,7 @@ export default function Dados() {
                     validationAddress.touched[field] &&
                     validationAddress.errors[field]
                   }
-                  mask={
-                    input.id === "cep"
-                      ? "99999-999"
-                      : input.id === "uf"
-                      ? "**"
-                      : ""
-                  }
+                  mask={input.id === "cep" ? "99999-999" : ""}
                   required={input.id !== "comp"}
                 />
               ) : null;

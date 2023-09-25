@@ -28,29 +28,9 @@ export let inputAddressLabels = [
     label: "CEP",
   },
   {
-    type: "text",
-    id: "address",
-    label: "Logradouro",
-  },
-  {
     type: "number",
     id: "number",
     label: "Número",
-  },
-  {
-    type: "text",
-    id: "neighborhood",
-    label: "Bairro",
-  },
-  {
-    type: "text",
-    id: "city",
-    label: "Cidade",
-  },
-  {
-    type: "text",
-    id: "uf",
-    label: "UF",
   },
   {
     type: "text",
