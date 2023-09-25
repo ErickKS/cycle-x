@@ -13,16 +13,16 @@ export default function Home() {
   const [cameraAlert, setCameraAlert] = useState(false);
 
   async function checkAccessToCamera() {
-    try {
-      const mediaCamera = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
+    // try {
+    //   const mediaCamera = await navigator.mediaDevices.getUserMedia({
+    //     video: { facingMode: "environment" },
+    //   });
 
-      router.push("/registro");
-    } catch {
-      router.push("/registro");
-      // setCameraAlert(!cameraAlert);
-    }
+    // } catch {
+    //   router.push("/registro");
+    //   setCameraAlert(!cameraAlert);
+    // }
+    router.push("/registro");
   }
 
   return (
