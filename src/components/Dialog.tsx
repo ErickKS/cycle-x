@@ -30,8 +30,8 @@ export function DialogAddress({
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 bg-black/40" />
 
-        <DialogPrimitive.Content className="fixed left-1/2 z-10 h-screen w-full max-w-[498px] -translate-x-1/2 items-center px-4 sm:top-1/2 sm:h-auto sm:-translate-y-1/2 sm:px-6">
-          <div className="flex h-screen flex-col gap-6 overflow-y-scroll rounded border-2 border-primary bg-white px-4 py-6 text-black sm:h-fit">
+        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 z-10 w-full max-w-[498px] -translate-x-1/2 -translate-y-1/2 px-4 sm:px-6">
+          <div className="flex flex-col gap-6 rounded border-2 border-primary bg-white px-4 py-6 text-black">
             <div className="flex justify-between">
               <DialogPrimitive.Title className="text-xl font-medium">
                 {type === "add" ? `Adicionar ${title}` : `Editar ${title}`}

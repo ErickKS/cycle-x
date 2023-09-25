@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactNode, createContext, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useState,
+} from "react";
 
 export interface User {
   name: string;
@@ -10,11 +16,7 @@ export interface User {
 }
 export interface Address {
   cep: string;
-  address: string;
   number: number | string;
-  neighborhood: string;
-  city: string;
-  uf: string;
   comp?: string;
 }
 
@@ -47,9 +49,9 @@ export interface Plan {
 }
 
 export interface Photo {
-  name: string;
-  size: number | string;
-  type: string;
+  file: File | null;
+  previewURL: string;
+  status: string;
 }
 export interface Photos {
   right: Photo;
@@ -75,7 +77,7 @@ interface RegisterContextData {
   deleteAccessoryData: (accessoryData: Accessory | null) => void;
   setSelectedAccessory: (accessory: Accessory | null) => void;
   updatePlanData: (planData: Plan) => void;
-  updatePhotosData: (photosData: Photos) => void;
+  setPhotos: Dispatch<SetStateAction<Photos>>;
 }
 
 interface RegisterContextProviderProps {
@@ -94,11 +96,7 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
 
   const [address, setAddress] = useState<Address>({
     cep: "",
-    address: "",
     number: "",
-    neighborhood: "",
-    city: "",
-    uf: "",
     comp: "",
   });
 
@@ -121,19 +119,19 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
 
   const [photos, setPhotos] = useState<Photos>({
     right: {
-      name: "",
-      size: "",
-      type: "",
+      file: null,
+      previewURL: "",
+      status: "waiting",
     },
     left: {
-      name: "",
-      size: "",
-      type: "",
+      file: null,
+      previewURL: "",
+      status: "waiting",
     },
     chassi: {
-      name: "",
-      size: "",
-      type: "",
+      file: null,
+      previewURL: "",
+      status: "waiting",
     },
   });
 
@@ -181,10 +179,6 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
     setPlan(planData);
   }
 
-  function updatePhotosData(photosData: Photos) {
-    setPhotos(photosData);
-  }
-
   return (
     <RegisterContext.Provider
       value={{
@@ -194,6 +188,7 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
         accessory,
         plan,
         photos,
+        setPhotos,
         updateUserData,
         updateAddressData,
         updateBikeData,
@@ -202,7 +197,6 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
         setSelectedAccessory,
         selectedAccessory,
         updatePlanData,
-        updatePhotosData,
       }}
     >
       {children}
