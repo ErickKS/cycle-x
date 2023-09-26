@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Photos } from "@/contexts/RegisterContext";
 import { useRegister } from "@/hooks/useRegister";
@@ -9,6 +9,7 @@ import { useRegister } from "@/hooks/useRegister";
 import { Banner } from "@/components/Banner";
 import { FileUpload } from "@/components/FileUpload";
 import { Toast } from "@/components/Toast";
+import { DialogAlert } from "@/components/Dialog";
 import { Actions } from "@/patterns/Actions";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
@@ -16,11 +17,30 @@ import { uploadFilesComponents } from "@/constants/uploadFiles";
 export default function Foto() {
   const { photos } = useRegister();
 
+  const [cameraAlert, setCameraAlert] = useState(false);
+
   const [toastActive, setToastActive] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [validationClicked, setValidationClicked] = useState(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    checkAccessToCamera();
+  }, []);
+
+  async function checkAccessToCamera() {
+    try {
+      const mediaCamera = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+
+      mediaCamera.getTracks().forEach((track) => track.stop());
+      router.push("/registro");
+    } catch {
+      setCameraAlert(!cameraAlert);
+    }
+  }
 
   function handleToast() {
     setToastActive(false);
@@ -95,6 +115,8 @@ export default function Foto() {
       <div className="grid gap-4 xs:grid-cols-2">
         <Actions onStepCompletion={handleBikePhotos} />
       </div>
+
+      {cameraAlert && <DialogAlert open={cameraAlert} block />}
     </>
   );
 }

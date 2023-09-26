@@ -4,6 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { AlertOctagon, X } from "lucide-react";
 
 import { CustomButton } from "./CustomButton";
+import Link from "next/link";
 
 interface DialogProps {
   open: boolean;
@@ -121,11 +122,11 @@ export function DialogAccessory({
   );
 }
 
-interface DialogHomeProps extends Partial<DialogProps> {
+interface DialogAlertProps extends Partial<DialogProps> {
   block?: boolean;
 }
 
-export function DialogHome({ open, setOpen, block }: DialogHomeProps) {
+export function DialogAlert({ open, setOpen, block }: DialogAlertProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Portal>
@@ -150,9 +151,12 @@ export function DialogHome({ open, setOpen, block }: DialogHomeProps) {
               </p>
 
               {block ? (
-                <button className="mx-auto flex items-center justify-center rounded border-2 border-primary bg-transparent px-4 py-2 text-center text-lg font-semibold text-primary outline-none transition hover:bg-primary/10 focus:bg-primary/10">
+                <Link
+                  href={"/"}
+                  className="mx-auto flex w-fit items-center justify-center rounded border-2 border-red bg-transparent px-6 py-1 text-center text-lg font-semibold text-red outline-none transition hover:bg-red/10 focus:bg-red/10"
+                >
                   Sair
-                </button>
+                </Link>
               ) : (
                 <DialogPrimitive.Close className="mx-auto flex items-center justify-center rounded border-2 border-primary bg-transparent px-4 py-2 text-center text-lg font-semibold text-primary outline-none transition hover:bg-primary/10 focus:bg-primary/10">
                   Entendido

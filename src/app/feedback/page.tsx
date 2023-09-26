@@ -1,9 +1,27 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Image from "next/image";
 
 import { Copyright } from "@/components/Copyright";
 import { CustomButton } from "@/components/CustomButton";
+import { useRegister } from "@/hooks/useRegister";
 
 export default function Feedback() {
+  const { user, address, bike, plan, photos } = useRegister();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user || !address || !bike || !plan || !photos) {
+      alert(
+        "Você não preencheu as etapas da contração; por favor, retorne e siga as instruções corretamente.",
+      );
+      router.push("/");
+    }
+  }, []);
+
   return (
     <div className="flex max-w-[498px] justify-center sm:flex-col sm:gap-4">
       <div className="absolute inset-0 -top-8 h-[150px] w-full rounded-[30px] bg-blue sm:hidden" />

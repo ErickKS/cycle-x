@@ -6,24 +6,23 @@ import { useState } from "react";
 
 import { Copyright } from "@/components/Copyright";
 import { CustomButton } from "@/components/CustomButton";
-import { DialogHome } from "@/components/Dialog";
+import { DialogAlert } from "@/components/Dialog";
 
 export default function Home() {
   const router = useRouter();
   const [cameraAlert, setCameraAlert] = useState(false);
 
   async function checkAccessToCamera() {
-    // try {
-    //   const mediaCamera = await navigator.mediaDevices.getUserMedia({
-    //     video: { facingMode: "environment" },
-    //   });
+    try {
+      const mediaCamera = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
 
-    //   mediaCamera.getTracks().forEach((track) => track.stop());
-    //   router.push("/registro");
-    // } catch {
-    //   setCameraAlert(!cameraAlert);
-    // }
-    router.push("/registro");
+      mediaCamera.getTracks().forEach((track) => track.stop());
+      router.push("/registro");
+    } catch {
+      setCameraAlert(!cameraAlert);
+    }
   }
 
   return (
@@ -65,7 +64,7 @@ export default function Home() {
       </div>
 
       {cameraAlert && (
-        <DialogHome open={cameraAlert} setOpen={setCameraAlert} />
+        <DialogAlert open={cameraAlert} setOpen={setCameraAlert} />
       )}
     </>
   );
