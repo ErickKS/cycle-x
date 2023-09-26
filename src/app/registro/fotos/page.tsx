@@ -70,7 +70,7 @@ export default function Foto() {
 
               <FileUpload
                 category={id as keyof Photos}
-                alert={
+                requirement={
                   validationClicked &&
                   (photos[id as keyof Photos].status === "waiting" ||
                     photos[id as keyof Photos].status === "invalid")

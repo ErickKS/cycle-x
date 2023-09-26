@@ -9,10 +9,10 @@ import axios from "axios";
 
 interface FileUploadProps {
   category: keyof Photos;
-  alert?: boolean;
+  requirement?: boolean;
 }
 
-export function FileUpload({ category, alert }: FileUploadProps) {
+export function FileUpload({ category, requirement }: FileUploadProps) {
   const { photos, setPhotos } = useRegister();
   const selectedPhoto = photos[category];
 
@@ -45,6 +45,7 @@ export function FileUpload({ category, alert }: FileUploadProps) {
 
     const file = files[0];
 
+
     setStatus("validating");
     setPhotos((prevPhotos) => ({
       ...prevPhotos,
@@ -56,6 +57,7 @@ export function FileUpload({ category, alert }: FileUploadProps) {
     }));
 
     if (file) {
+      alert(file.size / 1000 + "Kb");
       const image = await loadImageBase64(file);
 
       const response = await axios.post(
@@ -95,7 +97,7 @@ export function FileUpload({ category, alert }: FileUploadProps) {
         data-valid={selectedPhoto.status === "valid"}
         data-invalid={selectedPhoto.status === "invalid"}
         className={`relative flex h-[150px] w-full cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded border-2 px-2 py-2 transition hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light data-[invalid=true]:border-red data-[valid=true]:border-green ${
-          alert ? "border-red" : "border-primary"
+          requirement ? "border-red" : "border-primary"
         }`}
       >
         {selectedPhoto.previewURL ? (
