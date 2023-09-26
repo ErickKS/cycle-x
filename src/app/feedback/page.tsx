@@ -19,8 +19,8 @@ export default function Feedback() {
               Parabéns, estamos quase lá!
             </h1>
             <p className="text-lg">
-              Nossa IA está verificando as fotos de sua bike, aguarde o nosso
-              retorno via <b>e-mail</b>.
+              Em breve, você receberá um <b>e-mail</b> contendo os resultados da
+              contratação do seguro de sua bike.
             </p>
           </div>
         </div>

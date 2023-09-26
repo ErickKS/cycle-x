@@ -40,7 +40,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
   }, [status]);
 
   async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
-    const { files } = event.target;
+    const { files, name } = event.target;
 
     if (!files) return;
 
@@ -62,7 +62,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
       useWebWorker: true,
     };
 
-    if (file) {
+    if (file && name !== "chassi") {
       const compressedFile = await imageCompression(file, compressOptions);
       const image = await loadImageBase64(compressedFile);
 
@@ -148,7 +148,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
         capture="environment"
       />
 
-      {selectedPhoto.status !== "waiting" && (
+      {selectedPhoto.status !== "waiting" && category !== "chassi" && (
         <div
           data-valid={selectedPhoto.status === "valid"}
           data-invalid={
@@ -177,10 +177,12 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
             </svg>
           )}
 
-          {selectedPhoto.status === "invalid" ||
-            (selectedPhoto.status === "error" && (
-              <AlertOctagon className="stroke-red" />
-            ))}
+          {selectedPhoto.status === "invalid" && (
+            <AlertOctagon className="stroke-red" />
+          )}
+          {selectedPhoto.status === "error" && (
+            <AlertOctagon className="stroke-red" />
+          )}
           {selectedPhoto.status === "valid" && (
             <CheckCircle2 className="stroke-green" />
           )}
