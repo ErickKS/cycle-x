@@ -32,11 +32,6 @@ export default function Foto() {
       (photo) => photo.status === "valid",
     );
 
-    setToastMessage(
-      "Certifique-se de que todas as fotos estejam anexadas e válidas.",
-    );
-    handleToast();
-
     return isReadyToSave;
   }
 
@@ -44,6 +39,13 @@ export default function Foto() {
     setValidationClicked(true);
 
     const isAllPhotosFilled = areAllPhotosFilled(photos);
+
+    if (!isAllPhotosFilled) {
+      setToastMessage(
+        "Certifique-se de que todas as fotos estejam anexadas e válidas.",
+      );
+      handleToast();
+    }
 
     if (isAllPhotosFilled) router.push("/registro");
   }
@@ -73,7 +75,8 @@ export default function Foto() {
                 requirement={
                   validationClicked &&
                   (photos[id as keyof Photos].status === "waiting" ||
-                    photos[id as keyof Photos].status === "invalid")
+                    photos[id as keyof Photos].status === "invalid" ||
+                    photos[id as keyof Photos].status === "error")
                 }
               />
             </div>

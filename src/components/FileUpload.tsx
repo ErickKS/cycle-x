@@ -34,13 +34,13 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
       ...prevPhotos,
       [category]: {
         ...prevPhotos[category],
-        status: status,
+        status,
       },
     }));
   }, [status]);
 
   async function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
-    const { files, name } = event.target;
+    const { files } = event.target;
 
     if (!files) return;
 
@@ -50,9 +50,9 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
     setPhotos((prevPhotos) => ({
       ...prevPhotos,
       [category]: {
+        ...prevPhotos[category],
         file,
         previewURL: URL.createObjectURL(file),
-        status: status,
       },
     }));
 
@@ -62,7 +62,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
       useWebWorker: true,
     };
 
-    if (file && name !== "chassi") {
+    if (file && category !== "chassi") {
       const compressedFile = await imageCompression(file, compressOptions);
       const image = await loadImageBase64(compressedFile);
 
@@ -98,6 +98,10 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
           },
         }));
       }
+    }
+
+    if (file && category === "chassi") {
+      setStatus("valid");
     }
   }
 
@@ -193,7 +197,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
               "Sucesso, a bicicleta foi validada!"}
             {selectedPhoto.status === "invalid" &&
               "Nenhuma bicicleta foi detectada, tente novamente!"}
-            {selectedPhoto.status === "invalid" &&
+            {selectedPhoto.status === "error" &&
               "Não foi possível realizar a análise, por favor, tente novamente!"}
           </span>
         </div>
