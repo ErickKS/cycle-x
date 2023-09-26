@@ -36,7 +36,6 @@ export default function Foto() {
       });
 
       mediaCamera.getTracks().forEach((track) => track.stop());
-      router.push("/registro");
     } catch {
       setCameraAlert(!cameraAlert);
     }

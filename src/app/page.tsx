@@ -23,6 +23,7 @@ export default function Home() {
     } catch {
       setCameraAlert(!cameraAlert);
     }
+    // router.push("/registro");
   }
 
   return (
