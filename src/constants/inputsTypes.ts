@@ -43,12 +43,7 @@ export let inputBikeLabels = [
   {
     type: "text",
     id: "model",
-    label: "Modelo da bike",
-  },
-  {
-    type: "number",
-    id: "year",
-    label: "Ano de fabricação",
+    label: "Modelo",
   },
   {
     type: "text",
@@ -59,6 +54,11 @@ export let inputBikeLabels = [
     type: "number",
     id: "price",
     label: "Valor",
+  },
+  {
+    type: "number",
+    id: "usage",
+    label: "Anos de uso",
   },
 ];
 

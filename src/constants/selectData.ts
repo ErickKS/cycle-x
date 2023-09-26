@@ -1,6 +1,11 @@
-export const selectBike = {
-  placeholder: "Marca da bike",
-  item: ["Caloi", "Monark", "Scott", "Cannondale", "Trek"],
+export const selectBikeType = {
+  placeholder: "Tipo",
+  item: ["Tradicional", "Elétrica"],
+};
+
+export const selectBikeBrand = {
+  placeholder: "Marca",
+  item: ["Caloi", "Sense", "Scott", "Cannondale", "Trek"],
 };
 
 export const selectAccessory = {

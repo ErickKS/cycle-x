@@ -14,7 +14,11 @@ import { Input } from "@/components/Input";
 import { DialogAccessory } from "@/components/Dialog";
 import { Actions } from "@/patterns/Actions";
 import { inputAccessoryLabels, inputBikeLabels } from "@/constants/inputsTypes";
-import { selectBike, selectAccessory } from "@/constants/selectData";
+import {
+  selectBikeType,
+  selectBikeBrand,
+  selectAccessory,
+} from "@/constants/selectData";
 
 interface AccessoryErrorProps {
   brand: string;
@@ -35,7 +39,11 @@ export default function Bike() {
   const router = useRouter();
 
   // ========== BIKE
-  const [openSelectBike, setOpenSelectBike] = useState(false);
+  const [openSelectBikeType, setOpenSelectBikeType] = useState(false);
+  const [selectedBikeType, setSelectedBikeType] = useState<string>(bike.type);
+  const [selectedBikeTypeAlert, setSelectedBikeTypeAlert] = useState(false);
+
+  const [openSelectBikeBrand, setOpenSelectBikeBrand] = useState(false);
   const [selectedBikeBrand, setSelectedBikeBrand] = useState<string>(
     bike.brand,
   );
@@ -46,20 +54,12 @@ export default function Bike() {
     validate: (values) => {
       const errors: { [key: string]: string } = {
         model: "",
-        year: "",
         chassi: "",
         price: "",
+        usage: "",
       };
 
       if (!values.model) errors.model = "Campo obrigatório";
-
-      if (!values.year) {
-        errors.year = "Campo obrigatório";
-      } else if (+values.year < 1980) {
-        errors.year = "Bicicleta muito antiga para a contratação.";
-      } else if (+values.year > new Date().getFullYear()) {
-        errors.year = "Por favor, insira um ano válido";
-      }
 
       if (!values.chassi) errors.chassi = "Campo obrigatório";
 
@@ -67,20 +67,39 @@ export default function Bike() {
         errors.price = "Campo obrigatório";
       } else if (+values.price < 2000) {
         errors.price = "O valor da bike precisa ser maior que R$2000";
+      } else if (+values.price > 100000) {
+        errors.price = "O valor da bike precisa ser menor que R$100000";
+      }
+
+      if (!values.usage) {
+        errors.usage = "Campo obrigatório";
+      } else if (+values.usage > 3 && selectedBikeType === "Elétrica") {
+        errors.usage = "Cobrimos bikes elétricas de até 3 anos de uso.";
+      } else if (+values.usage > 8 && selectedBikeType === "Tradicional") {
+        errors.usage = "Cobrimos bikes tradicionais de até 8 anos de uso.";
       }
 
       return errors;
     },
   });
-
-  function handleBikeSelectChange(value: string) {
-    setSelectedBikeBrand(value);
+  function handleBikeSelectChange(value: string, field: string) {
+    if (field === "type") setSelectedBikeType(value);
+    if (field === "brand") setSelectedBikeBrand(value);
   }
+  function handleSelectBike(field: string) {
+    if (field === "type") {
+      if (selectedBikeTypeAlert) {
+        setSelectedBikeTypeAlert(!selectedBikeTypeAlert);
+      }
+      setOpenSelectBikeType(!openSelectBikeType);
+    }
 
-  function handleSelectBike() {
-    if (selectedBikeBrandAlert)
-      setSelectedBikeBrandAlert(!selectedBikeBrandAlert);
-    setOpenSelectBike(!openSelectBike);
+    if (field === "brand") {
+      if (selectedBikeBrandAlert) {
+        setSelectedBikeBrandAlert(!selectedBikeBrandAlert);
+      }
+      setOpenSelectBikeBrand(!openSelectBikeBrand);
+    }
   }
 
   // ========== ACCESSORY
@@ -224,19 +243,39 @@ export default function Bike() {
 
   // ========== SUBMIT STEP
   function handleBikeDocs() {
+    if (!selectedBikeType) setSelectedBikeTypeAlert(true);
+    if (!selectedBikeBrand) setSelectedBikeBrandAlert(true);
+
+    if (selectedBikeType === "Elétrica" && +validationBike.values.usage > 3) {
+      console.log("alerta elétrica");
+      validationBike.touched.usage = true;
+      validationBike.errors.usage =
+        "Cobrimos bikes elétricas de até 3 anos de uso.";
+    }
+    if (
+      selectedBikeType === "Tradicional" &&
+      +validationBike.values.usage > 8
+    ) {
+      console.log("alerta tradicional");
+      validationBike.touched.usage = true;
+      validationBike.errors.usage =
+        "Cobrimos bikes tradicional de até 8 anos de uso.";
+    }
+
     const isValidBike = Object.values(validationBike.errors).every(
       (error) => !error,
     );
 
-    if (!selectedBikeBrand) setSelectedBikeBrandAlert(true);
     if (!isValidBike) validationBike.handleSubmit();
 
-    if (selectedBikeBrand && isValidBike) {
+    if (selectedBikeType && selectedBikeBrand && isValidBike) {
       const newUserData = {
         ...validationBike.values,
+        type: selectedBikeType,
         brand: selectedBikeBrand,
       } as Bike;
       updateBikeData(newUserData);
+      console.log(newUserData);
       router.push("/registro");
     }
   }
@@ -251,12 +290,21 @@ export default function Bike() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4">
           <Select
-            open={openSelectBike}
-            onOpenChange={handleSelectBike}
-            onValueChange={handleBikeSelectChange}
+            open={openSelectBikeType}
+            onOpenChange={() => handleSelectBike("type")}
+            onValueChange={(value) => handleBikeSelectChange(value, "type")}
+            value={selectedBikeType}
+            alert={selectedBikeTypeAlert}
+            data={selectBikeType}
+          />
+
+          <Select
+            open={openSelectBikeBrand}
+            onOpenChange={() => handleSelectBike("brand")}
+            onValueChange={(value) => handleBikeSelectChange(value, "brand")}
             value={selectedBikeBrand}
             alert={selectedBikeBrandAlert}
-            data={selectBike}
+            data={selectBikeBrand}
           />
 
           {inputBikeLabels.map((input) => {

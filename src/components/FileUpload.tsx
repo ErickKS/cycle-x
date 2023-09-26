@@ -63,32 +63,41 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
     };
 
     if (file) {
-      alert(`${file.size / 1024 / 1024} MB`);
-
       const compressedFile = await imageCompression(file, compressOptions);
-      alert(`${compressedFile.size / 1024 / 1024} MB`);
-
       const image = await loadImageBase64(compressedFile);
 
-      const response = await axios.post(
-        "https://detect.roboflow.com/cycle-x/3",
-        image,
-        {
-          params: {
-            api_key: "Mpl7FsgDVqF02VTzBMg8",
+      try {
+        const response = await axios.post(
+          "https://detect.roboflow.com/cycle-x/3",
+          image,
+          {
+            params: {
+              api_key: "Mpl7FsgDVqF02VTzBMg8",
+            },
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
           },
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        },
-      );
+        );
+        if (response.data.predictions.length === 0) {
+          setStatus("invalid");
+          return;
+        }
 
-      if (response.data.predictions.length === 0) {
-        setStatus("invalid");
-        return;
+        setStatus("valid");
+        console.log(response.data.predictions[0]);
+      } catch (err) {
+        setStatus("error");
+
+        setPhotos((prevPhotos) => ({
+          ...prevPhotos,
+          [category]: {
+            ...prevPhotos[category],
+            file: null,
+            previewURL: "",
+          },
+        }));
       }
-
-      setStatus("valid");
     }
   }
 
@@ -142,7 +151,10 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
       {selectedPhoto.status !== "waiting" && (
         <div
           data-valid={selectedPhoto.status === "valid"}
-          data-invalid={selectedPhoto.status === "invalid"}
+          data-invalid={
+            selectedPhoto.status === "invalid" ||
+            selectedPhoto.status === "error"
+          }
           className="group grid w-full grid-cols-[24px_1fr] items-center gap-2 rounded border-2 border-transparent bg-primary-light p-3 transition data-[invalid=true]:border-red data-[valid=true]:border-green data-[invalid=true]:bg-[#EABCC4]  data-[valid=true]:bg-[#CEE7DE]"
         >
           {selectedPhoto.status === "validating" && (
@@ -165,9 +177,10 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
             </svg>
           )}
 
-          {selectedPhoto.status === "invalid" && (
-            <AlertOctagon className="stroke-red" />
-          )}
+          {selectedPhoto.status === "invalid" ||
+            (selectedPhoto.status === "error" && (
+              <AlertOctagon className="stroke-red" />
+            ))}
           {selectedPhoto.status === "valid" && (
             <CheckCircle2 className="stroke-green" />
           )}
@@ -178,6 +191,8 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
               "Sucesso, a bicicleta foi validada!"}
             {selectedPhoto.status === "invalid" &&
               "Nenhuma bicicleta foi detectada, tente novamente!"}
+            {selectedPhoto.status === "invalid" &&
+              "Não foi possível realizar a análise, por favor, tente novamente!"}
           </span>
         </div>
       )}

@@ -21,11 +21,12 @@ export interface Address {
 }
 
 export interface Bike {
+  type: string;
   brand: string;
   model: string;
-  year: number | string;
   chassi: string;
   price: number | string;
+  usage: number | string;
 }
 
 export interface Accessory {
@@ -101,11 +102,12 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
   });
 
   const [bike, setBike] = useState<Bike>({
+    type: "",
     brand: "",
     model: "",
-    year: "",
     chassi: "",
     price: "",
+    usage: "",
   });
 
   const [accessory, setAccessory] = useState<Accessory[]>([]);

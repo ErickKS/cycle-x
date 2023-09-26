@@ -89,7 +89,7 @@ export default function Planos() {
         />
 
         <a
-          href="/"
+          href="https://www.portoseguro.com.br/conteudo/seguros/bike/"
           className="inline text-center font-medium text-primary underline outline-primary"
           target="_blank"
         >
@@ -97,7 +97,7 @@ export default function Planos() {
         </a>
       </div>
 
-      <div className="xs:grid-cols-2 grid gap-4">
+      <div className="grid gap-4 xs:grid-cols-2">
         <Actions onStepCompletion={handleSelectedPlan} />
       </div>
     </>

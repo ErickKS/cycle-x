@@ -137,15 +137,16 @@ export function DialogHome({ open, setOpen, block }: DialogHomeProps) {
               <AlertOctagon className="stroke-red" size={32} />
 
               <DialogPrimitive.Title className="text-center text-xl font-semibold text-red">
-                Ops, parece que seu dispositivo não tem câmera!
+                Ops, parece que seu dispositivo não possui uma câmera ou a
+                permissão foi negada!
               </DialogPrimitive.Title>
             </div>
 
             <main className="space-y-6">
               <p className="text-center font-medium">
-                Para garantir a segurança, é necessário acessar através um
-                dispositivo móvel para concluir essa contratação, pois
-                precisamos de uma foto da sua bicicleta em tempo real.
+                Para garantir a segurança, é necessário usar um dispositivo
+                móvel para concluir esta contratação, uma vez que precisamos de
+                uma foto em tempo real da sua bicicleta.
               </p>
 
               {block ? (
