@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect } from "react";
+import axios from "axios";
+import imageCompression from "browser-image-compression";
 
 import { Photos } from "@/contexts/RegisterContext";
 import { useRegister } from "@/hooks/useRegister";
 
 import { AlertOctagon, CheckCircle2 } from "lucide-react";
-import axios from "axios";
 
 interface FileUploadProps {
   category: keyof Photos;
@@ -45,7 +46,6 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
 
     const file = files[0];
 
-
     setStatus("validating");
     setPhotos((prevPhotos) => ({
       ...prevPhotos,
@@ -56,9 +56,19 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
       },
     }));
 
+    const compressOptions = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
     if (file) {
-      alert(file.size / 1000 + "Kb");
-      const image = await loadImageBase64(file);
+      alert(`${file.size / 1024 / 1024} MB`);
+
+      const compressedFile = await imageCompression(file, compressOptions);
+      alert(`${compressedFile.size / 1024 / 1024} MB`);
+
+      const image = await loadImageBase64(compressedFile);
 
       const response = await axios.post(
         "https://detect.roboflow.com/cycle-x/3",
