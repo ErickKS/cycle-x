@@ -247,7 +247,6 @@ export default function Bike() {
     if (!selectedBikeBrand) setSelectedBikeBrandAlert(true);
 
     if (selectedBikeType === "Elétrica" && +validationBike.values.usage > 3) {
-      console.log("alerta elétrica");
       validationBike.touched.usage = true;
       validationBike.errors.usage =
         "Cobrimos bikes elétricas de até 3 anos de uso.";
@@ -256,7 +255,6 @@ export default function Bike() {
       selectedBikeType === "Tradicional" &&
       +validationBike.values.usage > 8
     ) {
-      console.log("alerta tradicional");
       validationBike.touched.usage = true;
       validationBike.errors.usage =
         "Cobrimos bikes tradicional de até 8 anos de uso.";
@@ -275,7 +273,6 @@ export default function Bike() {
         brand: selectedBikeBrand,
       } as Bike;
       updateBikeData(newUserData);
-      console.log(newUserData);
       router.push("/registro");
     }
   }

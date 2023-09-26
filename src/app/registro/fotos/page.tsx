@@ -61,7 +61,7 @@ export default function Foto() {
 
     if (!isAllPhotosFilled) {
       setToastMessage(
-        "Certifique-se de que todas as fotos estejam anexadas e válidas.",
+        "Certifique-se de que todas as fotos estejam anexadas e/ou válidas.",
       );
       handleToast();
     }

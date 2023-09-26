@@ -72,7 +72,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
           image,
           {
             params: {
-              api_key: "Mpl7FsgDVqF02VTzBMg8",
+              api_key: "9CKS54f235qhZTaHJylZ",
             },
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
@@ -85,7 +85,7 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
         }
 
         setStatus("valid");
-        console.log(response.data.predictions[0]);
+        console.log(response.data.predictions[0].confidence);
       } catch (err) {
         setStatus("error");
 
