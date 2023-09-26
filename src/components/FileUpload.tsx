@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect } from "react";
 
-import { api } from "@/lib/axios";
 import { Photos } from "@/contexts/RegisterContext";
 import { useRegister } from "@/hooks/useRegister";
 
 import { AlertOctagon, CheckCircle2 } from "lucide-react";
+import axios from "axios";
 
 interface FileUploadProps {
   category: keyof Photos;
@@ -18,6 +18,15 @@ export function FileUpload({ category, alert }: FileUploadProps) {
 
   const [status, setStatus] = useState<string>(selectedPhoto.status);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
+
+  const loadImageBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   useEffect(() => {
     setPhotos((prevPhotos) => ({
@@ -47,18 +56,23 @@ export function FileUpload({ category, alert }: FileUploadProps) {
     }));
 
     if (file) {
-      const data = new FormData();
-      data.append("image", file);
+      const image = await loadImageBase64(file);
 
-      const response = await api.post("/photo", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await axios.post(
+        "https://detect.roboflow.com/cycle-x/3",
+        image,
+        {
+          params: {
+            api_key: "Mpl7FsgDVqF02VTzBMg8",
+          },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
         },
-      });
+      );
 
-      if (response.data.response_ia.predictions.length === 0) {
+      if (response.data.predictions.length === 0) {
         setStatus("invalid");
-
         return;
       }
 
