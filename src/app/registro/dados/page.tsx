@@ -31,7 +31,7 @@ export default function Dados() {
 
       if (!values.name) {
         errors.name = "Campo obrigatório";
-      } else if (!/^[A-Za-zÀ-ú'-]+( [A-Za-zÀ-ú'-]+)+$/i.test(values.name)) {
+      } else if (!/^[A-Za-zÀ-ú'-]+( [A-Za-zÀ-ú'-]+ ?)+$/i.test(values.name)) {
         errors.name = "Por favor, insira um nome válido";
       }
 
@@ -79,7 +79,11 @@ export default function Dados() {
         errors.cep = "Por favor, insira um CEP válido";
       }
 
-      if (!values.number) errors.number = "Campo obrigatório";
+      if (!values.number) {
+        errors.number = "Campo obrigatório";
+      } else if (+values.number <= 0) {
+        errors.number = "Insira um número válido";
+      }
 
       return errors;
     },
@@ -92,7 +96,7 @@ export default function Dados() {
     (error) => !error,
   );
 
-  // =========  = ADDRESS
+  // ========== ADDRESS
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "edit" | null>(null);
   const [addressAlert, setAddressAlert] = useState(false);
