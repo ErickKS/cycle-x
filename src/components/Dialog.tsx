@@ -158,7 +158,7 @@ export function DialogAlert({ open, setOpen, block }: DialogAlertProps) {
                   Sair
                 </Link>
               ) : (
-                <DialogPrimitive.Close className="mx-auto flex items-center justify-center rounded border-2 border-primary bg-transparent px-4 py-2 text-center text-lg font-semibold text-primary outline-none transition hover:bg-primary/10 focus:bg-primary/10">
+                <DialogPrimitive.Close className="mx-auto flex items-center justify-center rounded border-2 border-red bg-transparent px-4 py-2 text-center text-lg font-semibold text-red outline-none transition hover:bg-red/10 focus:bg-red/10">
                   Entendido
                 </DialogPrimitive.Close>
               )}

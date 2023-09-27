@@ -65,6 +65,8 @@ export default function Bike() {
 
       if (!values.price) {
         errors.price = "Campo obrigatório";
+      } else if (+values.price < 0) {
+        errors.price = "Insira um valor válido";
       } else if (+values.price < 2000) {
         errors.price = "O valor da bike precisa ser maior que R$2000";
       } else if (+values.price > 100000) {
@@ -73,6 +75,8 @@ export default function Bike() {
 
       if (!values.usage) {
         errors.usage = "Campo obrigatório";
+      } else if (+values.usage < 0) {
+        errors.usage = "Insira um valor válido";
       } else if (+values.usage > 3 && selectedBikeType === "Elétrica") {
         errors.usage = "Cobrimos bikes elétricas de até 3 anos de uso.";
       } else if (+values.usage > 8 && selectedBikeType === "Tradicional") {
@@ -158,7 +162,12 @@ export default function Bike() {
 
     const updatedAlerts = {
       ...accessoryFieldsAlert,
-      [name]: value ? "" : "Campo obrigatório",
+      [name]:
+        +value <= 0
+          ? "Insira um valor válido"
+          : !value
+          ? "Campo obrigatório"
+          : "",
     };
     setAccessoryFieldsAlert(updatedAlerts);
   }
@@ -194,7 +203,12 @@ export default function Bike() {
     const updatedAlerts = {
       brand: accessory.brand.value ? "" : "Campo obrigatório",
       model: accessory.model.value ? "" : "Campo obrigatório",
-      price: accessory.price.value ? "" : "Campo obrigatório",
+      price:
+        +accessory.price.value <= 0
+          ? "Insira um valor válido"
+          : !accessory.price.value
+          ? "Campo obrigatório"
+          : "",
     };
 
     setAccessoryFieldsAlert(updatedAlerts);
@@ -202,7 +216,8 @@ export default function Bike() {
     return (
       accessory.brand.value === "" ||
       accessory.model.value === "" ||
-      accessory.price.value === ""
+      accessory.price.value === "" ||
+      +accessory.price.value <= 0
     );
   }
 

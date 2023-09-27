@@ -13,8 +13,32 @@ export default function Feedback() {
 
   const router = useRouter();
 
+  const isValidUser = Object.values(user).every((value) => !!value);
+
+  const isValidAddress = Object.keys(address)
+    .filter((value) => value !== "comp")
+    .every((value) => !!value);
+
+  const isValidBike = Object.values(bike).every((value) => !!value);
+
+  const isValidPlan = Object.values(plan).every((value) => !!value);
+
+  const isValidPhotos = Object.values(photos).every(
+    (photo) => photo.status === "valid",
+  );
+
+  const isCompletedUserStep = isValidUser && isValidAddress;
+  const isCompletedBikeStep = isValidBike;
+  const isCompletedPlanStep = isValidPlan;
+  const isCompletedPhotosStep = isValidPhotos;
+
   useEffect(() => {
-    if (!user || !address || !bike || !plan || !photos) {
+    if (
+      !isCompletedUserStep ||
+      !isCompletedBikeStep ||
+      !isCompletedPlanStep ||
+      !isCompletedPhotosStep
+    ) {
       alert(
         "Você não preencheu as etapas da contração; por favor, retorne e siga as instruções corretamente.",
       );

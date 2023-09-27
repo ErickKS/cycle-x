@@ -30,6 +30,20 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
   };
 
   useEffect(() => {
+    if (photos[category].status === "validating") {
+      setStatus("waiting");
+      setPhotos((prevPhotos) => ({
+        ...prevPhotos,
+        [category]: {
+          file: null,
+          previewURL: "",
+          status,
+        },
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
     setPhotos((prevPhotos) => ({
       ...prevPhotos,
       [category]: {

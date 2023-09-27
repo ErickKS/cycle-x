@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { RegisterProvider } from "@/contexts/RegisterContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${inter.className} grid min-h-screen sm:place-content-center sm:bg-gradient sm:bg-fixed`}
-      >
-        {children}
-      </body>
+      <RegisterProvider>
+        <body
+          className={`${inter.className} grid min-h-screen sm:place-content-center sm:bg-gradient sm:bg-fixed`}
+        >
+          {children}
+        </body>
+      </RegisterProvider>
     </html>
   );
 }

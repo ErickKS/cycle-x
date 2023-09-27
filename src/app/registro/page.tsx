@@ -33,8 +33,8 @@ export default function Registro() {
 
   const isValidPlan = Object.values(plan).every((value) => !!value);
 
-  const isValidPhotos = Object.values(photos).every((value) =>
-    Object.values(value).every((value2) => !!value2),
+  const isValidPhotos = Object.values(photos).every(
+    (photo) => photo.status === "valid",
   );
 
   const isCompletedUserStep = isValidUser && isValidAddress;
