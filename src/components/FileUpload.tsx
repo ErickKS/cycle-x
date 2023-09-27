@@ -106,9 +106,9 @@ export function FileUpload({ category, requirement }: FileUploadProps) {
         setPhotos((prevPhotos) => ({
           ...prevPhotos,
           [category]: {
-            ...prevPhotos[category],
             file: null,
             previewURL: "",
+            status: "error",
           },
         }));
       }
