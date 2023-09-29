@@ -25,9 +25,9 @@ export default function Foto() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    checkAccessToCamera();
-  }, []);
+  // useEffect(() => {
+  //   checkAccessToCamera();
+  // }, []);
 
   async function checkAccessToCamera() {
     try {

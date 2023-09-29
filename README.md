@@ -11,7 +11,7 @@
 <br/>
 
 <div align="center">
-    <img src="./public/readme-gif.gif" alt="project gif" height="400px"/>
+    <img src="./public/readme.gif" alt="project gif" height="400px"/>
     <h3 align="center">
         <strong>
             <code>&nbsp;<a href="https://cycle-x.vercel.app/">live demo</a>&nbsp;</code>
@@ -24,8 +24,8 @@
 ## 📚 Project
 
 <p>
-Academic project developed to solve a problem proposed by the Porto company, emphasizing that this is still the third sprint (3/4) of Web Development in this challenge.</p>
-<p>The project aimed to automate the bike insurance hiring process, allowing customers to conduct remote inspections, making this process more intuitive.</p>
+Academic project developed to solve a problem proposed by the Porto company.</p>
+<p>The objective of this project is to create a digital solution for the bike product's customer to conduct online inspections at the time of purchase, without the need for human intervention in the process.</p>
 
 <br/>
 
@@ -40,7 +40,8 @@ Academic project developed to solve a problem proposed by the Porto company, emp
 
 ## 🧾 Features
 
-- [x] Collect user's personal information.
-- [x] Collect user's bike information.
+- [x] Collect and validate user's personal information.
+- [x] Collect and validate user's bike information.
 - [x] Collect the insurance plan selected by the user.
 - [x] Obtain specific photos of the bike.
+- [x] Validate bicycle photos in real time through an AI model integration.
