@@ -1,5 +1,5 @@
 {
-  "name": "challenge",
+  "name": "cycle-x",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -29,9 +29,5 @@
     "react-input-mask": "^3.0.0-alpha.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
-  },
-  "devDependencies": {
-    "prettier": "^3.0.2",
-    "prettier-plugin-tailwindcss": "^0.5.3"
   }
 }

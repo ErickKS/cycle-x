@@ -1,4 +1,4 @@
-export let inputDadosLabels = [
+export const inputDadosLabels = [
   {
     type: "text",
     id: "name",
@@ -21,7 +21,7 @@ export let inputDadosLabels = [
   },
 ];
 
-export let inputAddressLabels = [
+export const inputAddressLabels = [
   {
     type: "text",
     id: "cep",
@@ -39,7 +39,7 @@ export let inputAddressLabels = [
   },
 ];
 
-export let inputBikeLabels = [
+export const inputBikeLabels = [
   {
     type: "text",
     id: "model",
@@ -62,7 +62,7 @@ export let inputBikeLabels = [
   },
 ];
 
-export let inputAccessoryLabels = [
+export const inputAccessoryLabels = [
   {
     type: "text",
     id: "brand",

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useState,
-} from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from "react";
 
 export interface User {
   name: string;
@@ -53,6 +47,7 @@ export interface Photo {
   file: File | null;
   previewURL: string;
   status: string;
+  errors: number
 }
 export interface Photos {
   right: Photo;
@@ -71,10 +66,7 @@ interface RegisterContextData {
   updateAddressData: (addressData: Address) => void;
   updateBikeData: (bikeData: Bike) => void;
   selectedAccessory: Accessory | null;
-  updateOrAddAccessoryData: (
-    accessoryData: Accessory,
-    isUpdate?: boolean,
-  ) => void;
+  updateOrAddAccessoryData: (accessoryData: Accessory, isUpdate?: boolean) => void;
   deleteAccessoryData: (accessoryData: Accessory | null) => void;
   setSelectedAccessory: (accessory: Accessory | null) => void;
   updatePlanData: (planData: Plan) => void;
@@ -111,9 +103,7 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
   });
 
   const [accessory, setAccessory] = useState<Accessory[]>([]);
-  const [selectedAccessory, setSelectedAccessory] = useState<Accessory | null>(
-    null,
-  );
+  const [selectedAccessory, setSelectedAccessory] = useState<Accessory | null>(null);
 
   const [plan, setPlan] = useState<Plan>({
     name: "",
@@ -124,16 +114,19 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
       file: null,
       previewURL: "",
       status: "waiting",
+      errors: 0
     },
     left: {
       file: null,
       previewURL: "",
       status: "waiting",
+      errors: 0
     },
     chassi: {
       file: null,
       previewURL: "",
       status: "waiting",
+      errors: 0
     },
   });
 
@@ -149,13 +142,8 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
     setBike(bikeData);
   }
 
-  function updateOrAddAccessoryData(
-    accessoryData: Accessory,
-    isUpdate: boolean = false,
-  ) {
-    const index = accessory.findIndex(
-      (item) => item.model.id === accessoryData.model.id,
-    );
+  function updateOrAddAccessoryData(accessoryData: Accessory, isUpdate: boolean = false) {
+    const index = accessory.findIndex((item) => item.model.id === accessoryData.model.id);
 
     if (isUpdate && index !== -1) {
       const updatedAccessoryList = [...accessory];
@@ -170,9 +158,7 @@ export function RegisterProvider({ children }: RegisterContextProviderProps) {
   }
 
   function deleteAccessoryData(accessoryData: Accessory | null) {
-    const updatedAccessoryList = accessory.filter(
-      (item) => item.model.id !== accessoryData?.model.id,
-    );
+    const updatedAccessoryList = accessory.filter((item) => item.model.id !== accessoryData?.model.id);
     setAccessory(updatedAccessoryList);
     setSelectedAccessory(null);
   }

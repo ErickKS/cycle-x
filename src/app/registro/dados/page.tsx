@@ -8,10 +8,11 @@ import { useValidate } from "@/hooks/useValidate";
 import { useRegister } from "@/hooks/useRegister";
 import { Address, User } from "@/contexts/RegisterContext";
 
-import { Banner } from "@/components/Banner";
-import { Input } from "@/components/Input";
-import { DialogAddress } from "@/components/Dialog";
-import { Actions } from "@/patterns/Actions";
+import { Banner } from "@/components/layout/banner";
+import { Actions } from "@/components/layout/actions";
+import { Input } from "@/components/form/input";
+import { DialogAddress } from "@/components/dialog";
+
 import { inputDadosLabels, inputAddressLabels } from "@/constants/inputsTypes";
 
 export default function Dados() {
@@ -37,9 +38,7 @@ export default function Dados() {
 
       if (!values.email) {
         errors.email = "Campo obrigatório";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = "Por favor, insira um email válido";
       }
 
@@ -53,7 +52,7 @@ export default function Dados() {
         errors.cpf = "Campo obrigatório";
       } else if (
         !/^(?:(?!000\.000\.000-00|111\.111\.111-11|222\.222\.222-22|333\.333\.333-33|444\.444\.444-44|555\.555\.555-55|666\.666\.666-66|777\.777\.777-77|888\.888\.888-88|999\.999\.999-99)[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2})$/i.test(
-          values.cpf,
+          values.cpf
         )
       ) {
         // NÃO ESQUECER DE VALIDAR A MATEMÁTICA
@@ -89,12 +88,8 @@ export default function Dados() {
     },
   });
 
-  const isValidUser = Object.values(validationUser.errors).every(
-    (error) => !error,
-  );
-  const isValidAddress = Object.values(validationAddress.errors).every(
-    (error) => !error,
-  );
+  const isValidUser = Object.values(validationUser.errors).every((error) => !error);
+  const isValidAddress = Object.values(validationAddress.errors).every((error) => !error);
 
   // ========== ADDRESS
   const [openDialog, setOpenDialog] = useState(false);
@@ -122,8 +117,7 @@ export default function Dados() {
   // ========== SUBMIT STEP
   function handleClientDocs() {
     if (!isValidUser) validationUser.handleSubmit();
-    if (!isValidAddress || !submittedClientAddress)
-      setAddressAlert(!addressAlert);
+    if (!isValidAddress || !submittedClientAddress) setAddressAlert(!addressAlert);
 
     if (isValidUser && isValidAddress && submittedClientAddress) {
       const newUserData = validationUser.values as User;
@@ -137,7 +131,7 @@ export default function Dados() {
     <>
       <Banner
         title="Formulário de cadastro"
-        text="Preencha o formulário a seguir com seus dados pessoais."
+        description="Preencha o formulário a seguir com seus dados pessoais."
       />
 
       <div className="flex flex-col gap-8">
@@ -154,16 +148,8 @@ export default function Dados() {
                 label={input.label}
                 value={validationUser.values[field]}
                 onChange={validationUser.handleChange}
-                error={
-                  validationUser.touched[field] && validationUser.errors[field]
-                }
-                mask={
-                  input.id === "tel"
-                    ? "(99) 99999-9999"
-                    : input.id === "cpf"
-                    ? "999.999.999-99"
-                    : ""
-                }
+                error={validationUser.touched[field] && validationUser.errors[field]}
+                mask={input.id === "tel" ? "(99) 99999-9999" : input.id === "cpf" ? "999.999.999-99" : ""}
                 required
               />
             ) : null;
@@ -196,13 +182,7 @@ export default function Dados() {
             </button>
           )}
 
-          <DialogAddress
-            open={openDialog}
-            setOpen={setOpenDialog}
-            type={dialogType}
-            title="endereço"
-            onSubmit={handleClientAddress}
-          >
+          <DialogAddress open={openDialog} setOpen={setOpenDialog} type={dialogType} title="endereço" onSubmit={handleClientAddress}>
             {inputAddressLabels.map((input) => {
               const field = input.id as keyof Address;
 
@@ -215,10 +195,7 @@ export default function Dados() {
                   label={input.label}
                   value={validationAddress.values[field]}
                   onChange={validationAddress.handleChange}
-                  error={
-                    validationAddress.touched[field] &&
-                    validationAddress.errors[field]
-                  }
+                  error={validationAddress.touched[field] && validationAddress.errors[field]}
                   mask={input.id === "cep" ? "99999-999" : ""}
                   required={input.id !== "comp"}
                 />

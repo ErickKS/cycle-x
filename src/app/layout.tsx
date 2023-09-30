@@ -10,19 +10,11 @@ export const metadata: Metadata = {
   description: "Contrate o seguro para sua bicicleta!",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
       <RegisterProvider>
-        <body
-          className={`${inter.className} grid min-h-screen sm:place-content-center sm:bg-gradient sm:bg-fixed`}
-        >
-          {children}
-        </body>
+        <body className={`${inter.className} grid min-h-screen sm:place-content-center sm:bg-gradient sm:bg-fixed`}>{children}</body>
       </RegisterProvider>
     </html>
   );

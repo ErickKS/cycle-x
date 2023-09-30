@@ -1,4 +1,4 @@
-import { CustomButton } from "@/components/CustomButton";
+import { Button } from "@/components/button";
 
 interface ActionsProps {
   onStepCompletion: () => void;
@@ -7,17 +7,17 @@ interface ActionsProps {
 export function Actions({ onStepCompletion }: ActionsProps) {
   return (
     <>
-      <CustomButton href="/registro" type="outline" additionalClass="w-full">
+      <Button href="/registro" type="outline" additionalClass="w-full">
         Voltar
-      </CustomButton>
+      </Button>
 
-      <CustomButton
+      <Button
         onClick={onStepCompletion}
         type="solid"
         additionalClass="w-full"
       >
         Finalizar
-      </CustomButton>
+      </Button>
     </>
   );
 }

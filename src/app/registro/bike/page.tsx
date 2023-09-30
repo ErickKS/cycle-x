@@ -8,17 +8,14 @@ import { useValidate } from "@/hooks/useValidate";
 import { useRegister } from "@/hooks/useRegister";
 import { Accessory, Bike } from "@/contexts/RegisterContext";
 
-import { Banner } from "@/components/Banner";
-import { Select } from "@/components/Select";
-import { Input } from "@/components/Input";
-import { DialogAccessory } from "@/components/Dialog";
-import { Actions } from "@/patterns/Actions";
+import { Banner } from "@/components/layout/banner";
+import { Actions } from "@/components/layout/actions";
+import { Select } from "@/components/form/select";
+import { Input } from "@/components/form/input";
+import { DialogAccessory } from "@/components/dialog";
+
 import { inputAccessoryLabels, inputBikeLabels } from "@/constants/inputsTypes";
-import {
-  selectBikeType,
-  selectBikeBrand,
-  selectAccessory,
-} from "@/constants/selectData";
+import { selectBikeType, selectBikeBrand, selectAccessory } from "@/constants/selectData";
 
 interface AccessoryErrorProps {
   brand: string;
@@ -27,15 +24,8 @@ interface AccessoryErrorProps {
 }
 
 export default function Bike() {
-  const {
-    bike,
-    updateBikeData,
-    accessory,
-    updateOrAddAccessoryData,
-    deleteAccessoryData,
-    setSelectedAccessory,
-    selectedAccessory,
-  } = useRegister();
+  const { bike, updateBikeData, accessory, updateOrAddAccessoryData, deleteAccessoryData, setSelectedAccessory, selectedAccessory } =
+    useRegister();
   const router = useRouter();
 
   // ========== BIKE
@@ -44,9 +34,7 @@ export default function Bike() {
   const [selectedBikeTypeAlert, setSelectedBikeTypeAlert] = useState(false);
 
   const [openSelectBikeBrand, setOpenSelectBikeBrand] = useState(false);
-  const [selectedBikeBrand, setSelectedBikeBrand] = useState<string>(
-    bike.brand,
-  );
+  const [selectedBikeBrand, setSelectedBikeBrand] = useState<string>(bike.brand);
   const [selectedBikeBrandAlert, setSelectedBikeBrandAlert] = useState(false);
 
   const validationBike = useValidate<Bike>({
@@ -113,12 +101,11 @@ export default function Bike() {
   const [selectedAccessoryType, setSelectedAccessoryType] = useState("");
 
   const [accessorySelectAlert, setAccessorySelectAlert] = useState(false);
-  const [accessoryFieldsAlert, setAccessoryFieldsAlert] =
-    useState<AccessoryErrorProps>({
-      brand: "",
-      model: "",
-      price: "",
-    });
+  const [accessoryFieldsAlert, setAccessoryFieldsAlert] = useState<AccessoryErrorProps>({
+    brand: "",
+    model: "",
+    price: "",
+  });
 
   const emptyAccessoryValues = {
     type: "",
@@ -126,8 +113,7 @@ export default function Bike() {
     model: { id: "", value: "" },
     price: { id: "", value: "" },
   };
-  const [newAccessory, setNewAccessory] =
-    useState<Accessory>(emptyAccessoryValues);
+  const [newAccessory, setNewAccessory] = useState<Accessory>(emptyAccessoryValues);
 
   function handleSelectAccessoryChange(newValue: string) {
     if (selectedAccessory !== null) {
@@ -162,12 +148,7 @@ export default function Bike() {
 
     const updatedAlerts = {
       ...accessoryFieldsAlert,
-      [name]:
-        +value <= 0
-          ? "Insira um valor válido"
-          : !value
-          ? "Campo obrigatório"
-          : "",
+      [name]: +value <= 0 ? "Insira um valor válido" : !value ? "Campo obrigatório" : "",
     };
     setAccessoryFieldsAlert(updatedAlerts);
   }
@@ -203,22 +184,12 @@ export default function Bike() {
     const updatedAlerts = {
       brand: accessory.brand.value ? "" : "Campo obrigatório",
       model: accessory.model.value ? "" : "Campo obrigatório",
-      price:
-        +accessory.price.value <= 0
-          ? "Insira um valor válido"
-          : !accessory.price.value
-          ? "Campo obrigatório"
-          : "",
+      price: +accessory.price.value <= 0 ? "Insira um valor válido" : !accessory.price.value ? "Campo obrigatório" : "",
     };
 
     setAccessoryFieldsAlert(updatedAlerts);
 
-    return (
-      accessory.brand.value === "" ||
-      accessory.model.value === "" ||
-      accessory.price.value === "" ||
-      +accessory.price.value <= 0
-    );
+    return accessory.brand.value === "" || accessory.model.value === "" || accessory.price.value === "" || +accessory.price.value <= 0;
   }
 
   function handleSaveChanges() {
@@ -263,21 +234,14 @@ export default function Bike() {
 
     if (selectedBikeType === "Elétrica" && +validationBike.values.usage > 3) {
       validationBike.touched.usage = true;
-      validationBike.errors.usage =
-        "Cobrimos bikes elétricas de até 3 anos de uso.";
+      validationBike.errors.usage = "Cobrimos bikes elétricas de até 3 anos de uso.";
     }
-    if (
-      selectedBikeType === "Tradicional" &&
-      +validationBike.values.usage > 8
-    ) {
+    if (selectedBikeType === "Tradicional" && +validationBike.values.usage > 8) {
       validationBike.touched.usage = true;
-      validationBike.errors.usage =
-        "Cobrimos bikes tradicional de até 8 anos de uso.";
+      validationBike.errors.usage = "Cobrimos bikes tradicional de até 8 anos de uso.";
     }
 
-    const isValidBike = Object.values(validationBike.errors).every(
-      (error) => !error,
-    );
+    const isValidBike = Object.values(validationBike.errors).every((error) => !error);
 
     if (!isValidBike) validationBike.handleSubmit();
 
@@ -296,7 +260,7 @@ export default function Bike() {
     <>
       <Banner
         title="Sua bike"
-        text="Preencha o formulário abaixo com as informações da sua bike."
+        description="Preencha o formulário abaixo com as informações da sua bike."
       />
 
       <div className="flex flex-col gap-6">
@@ -331,9 +295,7 @@ export default function Bike() {
                 label={input.label}
                 value={validationBike.values[field]}
                 onChange={validationBike.handleChange}
-                error={
-                  validationBike.touched[field] && validationBike.errors[field]
-                }
+                error={validationBike.touched[field] && validationBike.errors[field]}
                 required
               />
             ) : null;
@@ -397,11 +359,7 @@ export default function Bike() {
                       label={input.label}
                       value={fieldValues.value}
                       onChange={handleAccessoryInputChange}
-                      error={
-                        accessoryFieldsAlert[
-                          input.id as keyof AccessoryErrorProps
-                        ]
-                      }
+                      error={accessoryFieldsAlert[input.id as keyof AccessoryErrorProps]}
                       required
                     />
                   ) : null;
@@ -432,11 +390,7 @@ export default function Bike() {
                       label={input.label}
                       value={fieldValues.value}
                       onChange={handleAccessoryInputChange}
-                      error={
-                        accessoryFieldsAlert[
-                          input.id as keyof AccessoryErrorProps
-                        ]
-                      }
+                      error={accessoryFieldsAlert[input.id as keyof AccessoryErrorProps]}
                       required
                     />
                   ) : null;

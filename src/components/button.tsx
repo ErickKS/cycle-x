@@ -1,28 +1,22 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
-interface CustomButtonProps {
+interface ButtonProps {
   href?: string;
   onClick?: () => void;
-  children: React.ReactNode;
   type: "solid" | "outline";
   additionalClass?: string;
+  children: ReactNode;
 }
 
-export function CustomButton({
-  href,
-  onClick,
-  children,
-  type,
-  additionalClass,
-}: CustomButtonProps) {
+export function Button({href, onClick, children, type, additionalClass}: ButtonProps) {
   if (additionalClass === undefined) additionalClass = "";
 
   if (href) {
     return (
       <Link
         href={href}
-        className={`
-          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
+        className={`flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
           ${
             type === "solid"
               ? "bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark"
@@ -40,8 +34,7 @@ export function CustomButton({
     return (
       <button
         onClick={onClick}
-        className={`
-          flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
+        className={`flex items-center justify-center rounded py-2 text-center text-lg font-semibold outline-none transition
           ${
             type === "solid"
               ? "bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark"

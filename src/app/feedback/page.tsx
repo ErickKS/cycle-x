@@ -1,50 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Image from "next/image";
+import { useEffect } from "react";
 
-import { Copyright } from "@/components/Copyright";
-import { CustomButton } from "@/components/CustomButton";
-import { useRegister } from "@/hooks/useRegister";
+import { useStepsCheck } from "@/hooks/useStepsCheck";
+
+import { Copyright } from "@/components/layout/copyright";
 
 export default function Feedback() {
-  const { user, address, bike, plan, photos } = useRegister();
-
+  const { isValid } = useStepsCheck()
   const router = useRouter();
 
-  const isValidUser = Object.values(user).every((value) => !!value);
-
-  const isValidAddress = Object.keys(address)
-    .filter((value) => value !== "comp")
-    .every((value) => !!value);
-
-  const isValidBike = Object.values(bike).every((value) => !!value);
-
-  const isValidPlan = Object.values(plan).every((value) => !!value);
-
-  const isValidPhotos = Object.values(photos).every(
-    (photo) => photo.status === "valid",
-  );
-
-  const isCompletedUserStep = isValidUser && isValidAddress;
-  const isCompletedBikeStep = isValidBike;
-  const isCompletedPlanStep = isValidPlan;
-  const isCompletedPhotosStep = isValidPhotos;
-
   useEffect(() => {
-    if (
-      !isCompletedUserStep ||
-      !isCompletedBikeStep ||
-      !isCompletedPlanStep ||
-      !isCompletedPhotosStep
-    ) {
-      alert(
-        "Você não preencheu as etapas da contração; por favor, retorne e siga as instruções corretamente.",
-      );
+    if (!isValid) {
+      alert("Você não preencheu as etapas da contração. Retorne e siga as instruções corretamente.");
       router.push("/");
     }
-  }, []);
+  }, [isValid, router]);
 
   return (
     <div className="flex max-w-[498px] justify-center sm:flex-col sm:gap-4">
@@ -57,32 +30,18 @@ export default function Feedback() {
           </div>
 
           <div className="space-y-2 text-center">
-            <h1 className="text-3xl font-semibold">
-              Parabéns, estamos quase lá!
-            </h1>
+            <h1 className="text-3xl font-semibold">Parabéns, estamos quase lá!</h1>
             <p className="text-lg">
-              Em breve, você receberá um <b>e-mail</b> contendo os resultados da
-              contratação do seguro de sua bike.
+              Em breve, você receberá um <b>e-mail</b> contendo os resultados da contratação do seguro de sua bike.
             </p>
           </div>
         </div>
 
-        <Image
-          src={"/bot-gif.gif"}
-          width={244}
-          height={244}
-          alt="robot gif"
-          className="mx-auto"
-          priority
-        />
+        <Image src={"/bot.gif"} blurDataURL={"/bot.gif"} width={244} height={244} placeholder="blur" alt="robot gif" className="mx-auto" />
 
-        <CustomButton
-          href="/"
-          type="solid"
-          additionalClass="px-12 mx-auto mt-auto mb-10 sm:mb-0 w-fit"
-        >
+        <a href="/" className="flex items-center justify-center w-fit mx-auto mt-auto mb-10 py-2 px-12 rounded text-center text-lg font-semibold outline-none transition sm:mb-0 bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark">
           Sair
-        </CustomButton>
+        </a>
       </div>
 
       <div className="mx-auto">
