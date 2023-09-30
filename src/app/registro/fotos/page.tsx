@@ -9,8 +9,8 @@ import { useRegister } from "@/hooks/useRegister";
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { FileUpload } from "@/components/file-upload";
-import { Toast } from "@/components/toast";
-import { DialogAlert } from "@/components/dialog";
+import { Toast } from "@/components/radix/toast";
+import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
 

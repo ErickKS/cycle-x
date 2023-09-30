@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { Copyright } from "@/components/layout/copyright";
 import { Button } from "@/components/button";
-import { DialogAlert } from "@/components/dialog";
+import { DialogAlert } from "@/components/radix/dialog";
 
 export default function Home() {
   const [cameraAlert, setCameraAlert] = useState(false);

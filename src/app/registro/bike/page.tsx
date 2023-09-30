@@ -12,7 +12,7 @@ import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { Select } from "@/components/form/select";
 import { Input } from "@/components/form/input";
-import { DialogAccessory } from "@/components/dialog";
+import { DialogAccessory } from "@/components/radix/dialog";
 
 import { inputAccessoryLabels, inputBikeLabels } from "@/constants/inputsTypes";
 import { selectBikeType, selectBikeBrand, selectAccessory } from "@/constants/selectData";

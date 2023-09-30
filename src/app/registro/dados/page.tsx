@@ -11,7 +11,7 @@ import { Address, User } from "@/contexts/RegisterContext";
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { Input } from "@/components/form/input";
-import { DialogAddress } from "@/components/dialog";
+import { DialogAddress } from "@/components/radix/dialog";
 
 import { inputDadosLabels, inputAddressLabels } from "@/constants/inputsTypes";
 
