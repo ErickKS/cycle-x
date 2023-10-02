@@ -14,6 +14,18 @@ import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
 
+declare global {
+  interface Window {
+    watsonAssistantChatOptions: {
+      onLoad: (instance: any) => void;
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      clientVersion?: string;
+    };
+  }
+}
+
 export default function Foto() {
   const { photos } = useRegister();
 
@@ -35,8 +47,29 @@ export default function Foto() {
   }, [photos])
 
   useEffect(() => {
-    checkAccessToCamera();
-  }, []);
+    if (uploadErrors) {
+      window.watsonAssistantChatOptions = {
+        integrationID: "c4046c4b-bd4a-4b56-b971-324597740d1e",
+        region: "us-south",
+        serviceInstanceID: "a18024a7-c4ce-46e1-adc9-db758cf2cb4f",
+        onLoad: (instance: any) => instance.render(),
+      };
+
+      if (!document.querySelector('script[src*="WatsonAssistantChatEntry.js"]')) {
+        const chatbot = document.createElement("script");
+
+        chatbot.src =
+          "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +
+          (window.watsonAssistantChatOptions.clientVersion || "latest") +
+          "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(chatbot);
+      }
+    }
+  }, [uploadErrors]);
+
+  // useEffect(() => {
+  //   checkAccessToCamera();
+  // }, []);
 
   async function checkAccessToCamera() {
     try {
@@ -101,7 +134,7 @@ export default function Foto() {
         })}
 
         {uploadErrors && (
-          <a href="#" className="inline text-center font-medium text-primary underline outline-primary" target="_blank">
+          <a href="#" className="inline text-center font-medium text-primary underline outline-primary">
             Não está conseguindo validar sua bike?
             <br />
             Clique aqui!
