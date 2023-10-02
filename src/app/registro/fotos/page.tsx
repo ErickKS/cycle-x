@@ -132,14 +132,6 @@ export default function Foto() {
             </div>
           );
         })}
-
-        {uploadErrors && (
-          <a href="#" className="inline text-center font-medium text-primary underline outline-primary">
-            Não está conseguindo validar sua bike?
-            <br />
-            Clique aqui!
-          </a>
-        )}
       </div>
 
       <div className="grid gap-4 xs:grid-cols-2">
