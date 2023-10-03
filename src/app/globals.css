@@ -38,3 +38,9 @@ input[type="number"]::-webkit-inner-spin-button {
   width: var(--radix-select-trigger-width);
   max-height: var(--radix-select-content-available-height);
 }
+
+/* CHATBOT */
+
+#WACContainer.WACContainer .WACLauncher__ButtonContainer.WACLauncher__ButtonContainer--noAnimation {
+  margin-bottom: 50px !important;
+}

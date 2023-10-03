@@ -33,21 +33,38 @@ export default function Foto() {
   const [toastActive, setToastActive] = useState(false);
   const [validationClicked, setValidationClicked] = useState(false);
 
-  const [uploadErrors, setUploadErrors] = useState(false);
+  // const [uploadErrors, setUploadErrors] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    for (const category in photos) {
-      if (photos[category as keyof Photos].errors >= 3) {
-        setUploadErrors(true);
-        break;
-      }
-    }
-  }, [photos])
+    checkAccessToCamera();
+  }, []);
 
-  useEffect(() => {
-    if (uploadErrors) {
+  // useEffect(() => {
+  //   for (const category in photos) {
+  //     if (photos[category as keyof Photos].errors >= 3) {
+  //       setUploadErrors(true);
+  //       break;
+  //     }
+  //   }
+  // }, [photos]);
+
+  async function checkAccessToCamera() {
+    try {
+      const mediaCamera = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+
+      mediaCamera.getTracks().forEach((track) => track.stop());
+      loadChatbot();
+    } catch {
+      setCameraAlert(true);
+    }
+  }
+
+  function loadChatbot() {
+    if (!cameraAlert) {
       window.watsonAssistantChatOptions = {
         integrationID: "c4046c4b-bd4a-4b56-b971-324597740d1e",
         region: "us-south",
@@ -64,22 +81,6 @@ export default function Foto() {
           "/WatsonAssistantChatEntry.js";
         document.head.appendChild(chatbot);
       }
-    }
-  }, [uploadErrors]);
-
-  // useEffect(() => {
-  //   checkAccessToCamera();
-  // }, []);
-
-  async function checkAccessToCamera() {
-    try {
-      const mediaCamera = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-
-      mediaCamera.getTracks().forEach((track) => track.stop());
-    } catch {
-      setCameraAlert(true);
     }
   }
 
@@ -106,29 +107,21 @@ export default function Foto() {
   return (
     <>
       <div className="flex flex-col gap-1">
-        <Banner
-          title="Envie as fotos da bike"
-          description="Tire as fotos da sua bike para nossa IA analisá-las."
-        />
+        <Banner title="Envie as fotos da bike" description="Tire as fotos da sua bike para nossa IA analisá-las." />
 
-        <span className="text-sm font-semibold text-red">
-          Lembre-se de tirar as fotos em um fundo neutro para facilitar a validação.
-        </span>
+        <span className="text-sm font-semibold text-red">Lembre-se de tirar as fotos em um fundo neutro para facilitar a validação.</span>
       </div>
 
       <div className="flex flex-col gap-4">
         {uploadFilesComponents.map(({ label, id }) => {
-          const status = ["waiting", "invalid", "error"]
+          const status = ["waiting", "invalid", "error"];
           const isNotValidStatus = status.includes(photos[id as keyof Photos].status);
 
           return (
             <div className="space-y-1" key={id}>
               <h2 className="text-lg font-medium">{label}</h2>
 
-              <FileUpload
-                category={id as keyof Photos}
-                requirement={validationClicked && isNotValidStatus}
-              />
+              <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} />
             </div>
           );
         })}
