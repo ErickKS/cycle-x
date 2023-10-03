@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useStepsCheck } from "@/hooks/useStepsCheck";
 
@@ -11,12 +11,22 @@ import { StepCard } from "@/components/step-card";
 import { Button } from "@/components/button";
 
 export default function Registro() {
-  const validation = useStepsCheck()
+  const validation = useStepsCheck();
   const router = useRouter();
 
-  const [stepAlert, setStepAlert] = useState({ user: false, bike: false, plan: false, photos: false});
+  const [stepAlert, setStepAlert] = useState({ user: false, bike: false, plan: false, photos: false });
   const [termsCheck, setTermsCheck] = useState(false);
   const [termsAlert, setTermsAlert] = useState(false);
+
+  useEffect(() => {
+    const chatbotScript = document.querySelector('script[src*="WatsonAssistantChatEntry.js"]');
+    const chatbot = document.querySelector(".WatsonAssistantChatHost");
+
+    if (chatbotScript && chatbot) {
+      chatbotScript.remove();
+      chatbot.remove();
+    }
+  }, []);
 
   function handleStepsAlerts(step: string) {
     setStepAlert((stepAlert) => ({
@@ -43,10 +53,7 @@ export default function Registro() {
 
   return (
     <>
-      <Banner
-        title="Vamos lá!"
-        description="Complete todas as etapas abaixo para realizar a contratação do seguro para a sua bike."
-      />
+      <Banner title="Vamos lá!" description="Complete todas as etapas abaixo para realizar a contratação do seguro para a sua bike." />
 
       <div className="space-y-4">
         <StepCard to="dados" completed={validation.userStep} title="Dados cadastrais" alert={stepAlert.user} />
