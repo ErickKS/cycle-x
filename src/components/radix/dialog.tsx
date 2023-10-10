@@ -17,13 +17,13 @@ interface DialogProps {
 
 interface DialogAddressProps extends DialogProps {}
 
-export function DialogAddress({ open, setOpen, type, title, onSubmit, children}: DialogAddressProps) {
+export function DialogAddress({ open, setOpen, type, title, onSubmit, children }: DialogAddressProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 bg-black/40" />
 
-        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 w-full max-w-[498px] px-4 sm:px-6">
+        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 w-full max-w-[498px] px-4 animate-fade-in sm:px-6">
           <div className="flex flex-col gap-6 px-4 py-6 rounded border-2 border-primary bg-white text-black">
             <div className="flex justify-between">
               <DialogPrimitive.Title className="text-xl font-medium">
@@ -42,11 +42,7 @@ export function DialogAddress({ open, setOpen, type, title, onSubmit, children}:
                 Cancelar
               </DialogPrimitive.Close>
 
-              <Button
-                type="solid"
-                onClick={onSubmit}
-                additionalClass="px-5"
-              >
+              <Button type="solid" onClick={onSubmit} additionalClass="px-5">
                 {type === "add" ? "Adicionar" : "Salvar"}
               </Button>
             </footer>
@@ -67,7 +63,7 @@ export function DialogAccessory({ open, setOpen, title, type, onSubmit, onDelete
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 bg-black/40" />
 
-        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-6 w-full max-w-[432px] px-4 py-6 rounded border-2 border-primary bg-white text-black sm:max-w-[450px]">
+        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-6 w-full max-w-[432px] px-4 py-6 rounded border-2 border-primary bg-white text-black animate-fade-in sm:max-w-[450px]">
           <div className="flex justify-between">
             <DialogPrimitive.Title className="text-xl font-medium">
               {type === "add" ? `Adicionar ${title}` : `Editar ${title}`}
@@ -94,11 +90,7 @@ export function DialogAccessory({ open, setOpen, title, type, onSubmit, onDelete
               </button>
             )}
 
-            <Button
-              type="solid"
-              onClick={onSubmit}
-              additionalClass="px-5"
-            >
+            <Button type="solid" onClick={onSubmit} additionalClass="px-5">
               {type === "add" ? "Adicionar" : "Salvar"}
             </Button>
           </footer>
@@ -124,15 +116,13 @@ export function DialogAlert({ open, setOpen, block }: DialogAlertProps) {
               <AlertOctagon className="stroke-red" size={32} />
 
               <DialogPrimitive.Title className="text-center text-xl font-semibold text-red">
-                Ops, parece que seu dispositivo não possui uma câmera ou a
-                permissão foi negada!
+                Ops, parece que seu dispositivo não possui uma câmera ou a permissão foi negada!
               </DialogPrimitive.Title>
             </div>
 
             <main className="space-y-6">
               <p className="text-center font-medium">
-                Para garantir a segurança, é necessário usar um dispositivo
-                móvel para concluir esta contratação, uma vez que precisamos de
+                Para garantir a segurança, é necessário usar um dispositivo móvel para concluir esta contratação, uma vez que precisamos de
                 uma foto em tempo real da sua bicicleta.
               </p>
 
