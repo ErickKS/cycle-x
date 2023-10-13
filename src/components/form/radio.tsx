@@ -1,4 +1,5 @@
 import { ElementType, InputHTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import clsx from "clsx";
 
 interface RadioRootProps extends InputHTMLAttributes<HTMLElement> {
   id: string;
@@ -15,10 +16,13 @@ function RadioRoot({ id, icon: Icon, name, children, checked, onKeyDown, alert, 
     <label
       tabIndex={1}
       onKeyDown={onKeyDown}
-      className={`flex flex-col rounded border-2 px-6 py-5 outline-none cursor-pointer animate-alert transition hover:bg-primary-light focus:bg-primary-light
-        ${checked ? "border-primary bg-primary-light" : "border-gray-light"}
-        ${alert && "border-red/70"}
-      `}
+      className={clsx(
+        "flex flex-col rounded border-2 px-6 py-5 outline-none cursor-pointer animate-alert transition",
+        "hover:bg-primary-light focus:bg-primary-light",
+        {"border-primary bg-primary-light" : checked},
+        {"border-gray-light" : !checked},
+        {"border-red/70" : alert}
+      )}
     >
       <input
         id={id}
@@ -38,28 +42,16 @@ function RadioRoot({ id, icon: Icon, name, children, checked, onKeyDown, alert, 
   );
 }
 
-interface RadioTitleProps {
+interface RadioTextsProps {
   children: ReactNode;
 }
 
-function RadioTitle({children}:RadioTitleProps) {
-  return (
-    <h2 className="text-xl font-semibold">
-      {children}
-    </h2>
-  )
+function RadioTitle({ children }:RadioTextsProps) {
+  return <h2 className="text-xl font-semibold">{children}</h2>
 }
 
-interface RadioDescriptionProps {
-  children: ReactNode;
-}
-
-function RadioDescription({children}: RadioDescriptionProps) {
-  return (
-    <p className="font-medium">
-      {children}
-    </p>
-  )
+function RadioDescription({ children }: RadioTextsProps) {
+  return <p className="font-medium">{children}</p>
 }
 
 export const Radio = {

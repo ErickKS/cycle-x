@@ -1,6 +1,7 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
+import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 
 interface SelectProps {
@@ -20,9 +21,12 @@ export function Select({ open, onOpenChange, value, onValueChange, alert, data }
     <SelectPrimitive.Root onValueChange={onValueChange} open={open} onOpenChange={onOpenChange} value={value}>
       <SelectPrimitive.Trigger
         aria-label="Bike"
-        className={`group flex w-full items-center justify-between rounded border-2 px-3 py-4 text-lg outline-none focus:bg-primary-light
-          ${alert ? "border-red" : "border-gray-light"}
-        `}
+        className={clsx(
+          "group flex items-center justify-between w-full px-3 py-4 border-2 rounded text-lg outline-none",
+          "focus:bg-primary-light",
+          {"border-red" : alert},
+          {"border-gray-light" : !alert},
+        )}
       >
         <SelectPrimitive.Value placeholder={data.placeholder}>
           {value ? value : data.placeholder}
@@ -35,13 +39,13 @@ export function Select({ open, onOpenChange, value, onValueChange, alert, data }
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content className="SelectContent relative -top-[2px]" position="popper">
-          <SelectPrimitive.Viewport className="rounded border-2 border-gray-light bg-white p-1 shadow-lg">
+          <SelectPrimitive.Viewport className="p-1 border-2 border-gray-light rounded bg-white shadow-lg">
             <SelectPrimitive.Group>
               {data.item.map((item, i) => (
                 <SelectPrimitive.Item
                   key={`${item}-${i}`}
                   value={item}
-                  className="flex cursor-pointer select-none items-center rounded-md p-2 text-lg focus:bg-primary-light focus:outline-none"
+                  className="flex items-center p-2 rounded-md text-lg cursor-pointer select-none focus:bg-primary-light focus:outline-none"
                 >
                   <SelectPrimitive.ItemText>{item}</SelectPrimitive.ItemText>
                 </SelectPrimitive.Item>

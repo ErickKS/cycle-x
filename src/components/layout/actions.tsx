@@ -7,15 +7,11 @@ interface ActionsProps {
 export function Actions({ onStepCompletion }: ActionsProps) {
   return (
     <>
-      <Button href="/registro" type="outline" additionalClass="w-full">
+      <Button href="/registro" type="outline">
         Voltar
       </Button>
 
-      <Button
-        onClick={onStepCompletion}
-        type="solid"
-        additionalClass="w-full"
-      >
+      <Button onClick={onStepCompletion} type="solid">
         Finalizar
       </Button>
     </>

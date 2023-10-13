@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { useStepsCheck } from "@/hooks/useStepsCheck";
+import { useFormStorageChecker } from "@/hooks/useFormStorageChecker";
 
 import { Banner } from "@/components/layout/banner";
 import { Checkbox } from "@/components/form/checkbox";
@@ -11,13 +11,14 @@ import { StepCard } from "@/components/step-card";
 import { Button } from "@/components/button";
 
 export default function Registro() {
-  const validation = useStepsCheck();
+  const validation = useFormStorageChecker();
   const router = useRouter();
 
   const [stepAlert, setStepAlert] = useState({ user: false, bike: false, plan: false, photos: false });
   const [termsCheck, setTermsCheck] = useState(false);
   const [termsAlert, setTermsAlert] = useState(false);
 
+  // disable chat bot
   useEffect(() => {
     const chatbotScript = document.querySelector('script[src*="WatsonAssistantChatEntry.js"]');
     const chatbot = document.querySelector(".WatsonAssistantChatHost");
@@ -53,7 +54,10 @@ export default function Registro() {
 
   return (
     <>
-      <Banner title="Vamos lá!" description="Complete todas as etapas abaixo para realizar a contratação do seguro para a sua bike." />
+      <Banner.Root>
+        <Banner.Title>Vamos lá!</Banner.Title>
+        <Banner.Text>Complete todas as etapas abaixo para realizar a contratação do seguro para a sua bike.</Banner.Text>
+      </Banner.Root>
 
       <div className="space-y-4">
         <StepCard to="dados" completed={validation.userStep} title="Dados cadastrais" alert={stepAlert.user} />
@@ -65,7 +69,7 @@ export default function Registro() {
       <div className="space-y-4">
         <Checkbox checked={termsCheck} alert={termsAlert} onCheckedChange={handleTerms} />
 
-        <Button type="solid" onClick={handleRegistration} additionalClass="w-full py-3">
+        <Button type="solid" onClick={handleRegistration} customStyles="w-full py-3">
           Enviar
         </Button>
       </div>

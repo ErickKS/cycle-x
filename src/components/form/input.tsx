@@ -1,4 +1,6 @@
 import { ComponentProps, FocusEvent } from "react";
+import clsx from "clsx";
+
 // @ts-ignore
 import InputMask from "react-input-mask";
 
@@ -25,19 +27,24 @@ export function Input({ id, label, mask, value, required, error, ...props }: Inp
         value={value}
         placeholder=" "
         autoComplete="off"
-        className={`w-full rounded border-2 px-3 pb-2 pt-6 font-medium outline-none focus:bg-primary-light
-          ${error ? "border-red" : "border-gray-light focus:border-b-primary"}
-          ${id === "uf" && "uppercase"}
-        `}
         mask={mask}
         onBlur={valueVerification}
+        className={clsx(
+          "w-full px-3 pb-2 pt-6 border-2 rounded font-medium outline-none",
+          "focus:bg-primary-light",
+          {"border-red" : error},
+          {"border-gray-light focus:border-b-primary" : !error},
+          {"uppercase" : id === "uf"}
+        )}
         {...props}
       />
       <label
         htmlFor={id}
-        className={`absolute left-3 top-4 cursor-text text-lg transition
-          ${error ? "text-red" : "text-black"}
-        `}
+        className={clsx(
+          "absolute left-3 top-4 cursor-text text-lg transition",
+          {"text-red" : error},
+          {"text-black" : !error},
+        )}
       >
         {label}
 

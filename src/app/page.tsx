@@ -26,7 +26,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex max-w-[498px] justify-center sm:flex-col sm:gap-4">
+      <main className="flex max-w-[498px] justify-center sm:flex-col sm:gap-4">
         <div className="absolute inset-0 -top-8 h-[200px] w-full rounded-[30px] bg-blue sm:hidden" />
 
         <div className="flex flex-col gap-4 rounded-xl px-6 pb-10 pt-28 sm:gap-10 sm:bg-white sm:p-8 sm:pt-16 sm:shadow-main">
@@ -41,7 +41,7 @@ export default function Home() {
             </div>
           </div>
 
-          <Button onClick={checkAccessToCamera} type="solid" additionalClass="px-6 mx-auto mt-auto mb-10 sm:mb-0 w-fit">
+          <Button onClick={checkAccessToCamera} type="solid" customStyles="w-fit px-6 mx-auto mt-auto mb-10 sm:mb-0">
             Começar contratação
           </Button>
         </div>
@@ -49,7 +49,7 @@ export default function Home() {
         <div className="mx-auto">
           <Copyright />
         </div>
-      </div>
+      </main>
 
       {cameraAlert && <DialogAlert open={cameraAlert} setOpen={setCameraAlert} />}
     </>

@@ -1,6 +1,7 @@
 "use client";
 
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import clsx from "clsx";
 import { Check } from "lucide-react";
 
 interface CheckboxProps {
@@ -14,11 +15,14 @@ export function Checkbox({ checked, alert, onCheckedChange }: CheckboxProps) {
     <div className="flex gap-2">
       <CheckboxPrimitive.Root
         id="terms"
-        className={`group relative top-0.5 flex h-5 min-w-[20px] items-center justify-center rounded border-2 bg-gray-light/70 outline-primary data-[state=checked]:bg-primary
-          ${alert ? "border-red" : "border-transparent"}
-        `}
         checked={checked}
         onCheckedChange={onCheckedChange}
+        className={clsx(
+          "group relative top-0.5 flex items-center justify-center h-5 min-w-[20px] border-2 rounded bg-gray-light/70 outline-primary",
+          "data-[state=checked]:bg-primary",
+          {"border-red" : alert},
+          {"border-transparent" : !alert},
+        )}
       >
         <CheckboxPrimitive.Indicator>
           <Check className="h-4 w-4 group-data-[state=checked]:stroke-primary-light" />

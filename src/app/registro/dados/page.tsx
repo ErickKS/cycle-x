@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { useValidate } from "@/hooks/useValidate";
-import { useRegister } from "@/hooks/useRegister";
-import { Address, User } from "@/contexts/RegisterContext";
+import { useFormStorage, Address, User } from "@/hooks/useFormStorage";
 
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
@@ -14,9 +13,10 @@ import { Input } from "@/components/form/input";
 import { DialogAddress } from "@/components/radix/dialog";
 
 import { inputDadosLabels, inputAddressLabels } from "@/constants/inputsTypes";
+import clsx from "clsx";
 
 export default function Dados() {
-  const { user, updateUserData, address, updateAddressData } = useRegister();
+  const { user, address, updateDataByStage } = useFormStorage();
   const router = useRouter();
 
   // ========== VALIDATIONS
@@ -105,7 +105,7 @@ export default function Dados() {
   function handleClientAddress() {
     if (isValidAddress) {
       const newUserAddress = validationAddress.values as Address;
-      updateAddressData(newUserAddress);
+      updateDataByStage("address", newUserAddress);
 
       setSubmittedClientAddress(true);
       setOpenDialog(false);
@@ -121,7 +121,7 @@ export default function Dados() {
 
     if (isValidUser && isValidAddress && submittedClientAddress) {
       const newUserData = validationUser.values as User;
-      updateUserData(newUserData);
+      updateDataByStage("user", newUserData);
 
       router.push("/registro");
     }
@@ -129,10 +129,10 @@ export default function Dados() {
 
   return (
     <>
-      <Banner
-        title="Formulário de cadastro"
-        description="Preencha o formulário a seguir com seus dados pessoais."
-      />
+      <Banner.Root>
+        <Banner.Title>Formulário de cadastro</Banner.Title>
+        <Banner.Text>Preencha o formulário a seguir com seus dados pessoais.</Banner.Text>
+      </Banner.Root>
 
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
@@ -160,7 +160,7 @@ export default function Dados() {
           <h2 className="text-xl font-medium">Endereço</h2>
 
           {submittedClientAddress || address.cep !== "" ? (
-            <div className="group flex w-full items-center justify-between rounded border-2 border-gray-light px-3 py-3 text-lg outline-none transition focus-within:bg-primary-light">
+            <div className="group flex items-center justify-between w-full px-3 py-3 border-2 border-gray-light rounded text-lg outline-none transition focus-within:bg-primary-light">
               <span>Meu endereço</span>
               <button
                 className="rounded bg-primary px-4 py-1 text-base text-white outline-none hover:bg-primary-dark focus:bg-primary-dark"
@@ -171,11 +171,13 @@ export default function Dados() {
             </div>
           ) : (
             <button
-              className={`
-                flex w-full items-center justify-between rounded border-2 p-3 text-left text-lg outline-none transition hover:bg-primary-light focus:bg-primary-light
-                ${addressAlert ? "border-red" : "border-gray-light"}
-              `}
               onClick={() => openAddressDialog(null)}
+              className={clsx(
+                "flex items-center justify-between w-full p-3 border-2 rounded text-left text-lg outline-none transition",
+                "hover:bg-primary-light focus:bg-primary-light",
+                {"border-red" : addressAlert},
+                {"border-gray-light" : !addressAlert}
+              )}
             >
               Adicionar Endereço
               <Plus />

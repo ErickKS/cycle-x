@@ -2,6 +2,7 @@
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import Link from "next/link";
+import clsx from "clsx";
 import { AlertOctagon, X } from "lucide-react";
 
 import { Button } from "@/components/button";
@@ -38,11 +39,17 @@ export function DialogAddress({ open, setOpen, type, title, onSubmit, children }
             <main className="flex flex-col gap-4">{children}</main>
 
             <footer className="flex justify-end gap-4">
-              <DialogPrimitive.Close className="flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent text-lg font-semibold text-primary outline-none transition hover:border-primary focus:border-primary">
+              <DialogPrimitive.Close
+                className={clsx(
+                  "flex justify-center px-5 py-2 border-2 border-transparent rounded bg-transparent outline-none transition",
+                  "text-lg font-semibold text-primary",
+                  "hover:border-primary focus:border-primary"
+                )}
+              >
                 Cancelar
               </DialogPrimitive.Close>
 
-              <Button type="solid" onClick={onSubmit} additionalClass="px-5">
+              <Button type="solid" onClick={onSubmit} customStyles="px-5">
                 {type === "add" ? "Adicionar" : "Salvar"}
               </Button>
             </footer>
@@ -78,19 +85,29 @@ export function DialogAccessory({ open, setOpen, title, type, onSubmit, onDelete
 
           <footer className="flex justify-end gap-4">
             {type === "add" ? (
-              <DialogPrimitive.Close className="flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent text-lg font-semibold text-primary outline-none transition hover:border-primary focus:border-primary">
+              <DialogPrimitive.Close
+                className={clsx(
+                  "flex justify-center px-5 py-2 border-2 border-transparent rounded bg-transparent outline-none transition",
+                  "text-lg font-semibold text-primary",
+                  "hover:border-primary focus:border-primary"
+                )}
+              >
                 Cancelar
               </DialogPrimitive.Close>
             ) : (
               <button
                 onClick={onDelete}
-                className="flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent text-lg font-semibold text-red outline-none transition hover:border-red focus:border-red"
+                className={clsx(
+                  "flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent outline-none transition",
+                  "text-lg font-semibold text-red",
+                  "hover:border-red focus:border-red"
+                )}
               >
                 Deletar
               </button>
             )}
 
-            <Button type="solid" onClick={onSubmit} additionalClass="px-5">
+            <Button type="solid" onClick={onSubmit} customStyles="px-5">
               {type === "add" ? "Adicionar" : "Salvar"}
             </Button>
           </footer>
@@ -129,12 +146,22 @@ export function DialogAlert({ open, setOpen, block }: DialogAlertProps) {
               {block ? (
                 <Link
                   href={"/"}
-                  className="flex w-fit items-center justify-center px-6 py-1 mx-auto rounded border-2 border-red bg-transparent text-center text-lg font-semibold text-red outline-none transition hover:bg-red/10 focus:bg-red/10"
+                  className={clsx(
+                    "flex items-center justify-center w-fit px-6 py-1 mx-auto border-2 border-red rounded bg-transparent outline-none transition",
+                    "text-center text-lg font-semibold text-red",
+                    "hover:bg-red/10 focus:bg-red/10"
+                  )}
                 >
                   Sair
                 </Link>
               ) : (
-                <DialogPrimitive.Close className="flex items-center justify-center px-4 py-2 mx-auto rounded border-2 border-red bg-transparent text-center text-lg font-semibold text-red outline-none transition hover:bg-red/10 focus:bg-red/10">
+                <DialogPrimitive.Close
+                  className={clsx(
+                    "flex items-center justify-center px-4 py-2 mx-auto rounded border-2 border-red bg-transparent outline-none transition",
+                    "text-center text-lg font-semibold text-red",
+                    "hover:bg-red/10 focus:bg-red/10"
+                  )}
+                >
                   Entendido
                 </DialogPrimitive.Close>
               )}

@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect } from "react";
 
-import { useStepsCheck } from "@/hooks/useStepsCheck";
+import { useFormStorageChecker } from "@/hooks/useFormStorageChecker";
 
 import { Copyright } from "@/components/layout/copyright";
+import clsx from "clsx";
 
 export default function Feedback() {
-  const { isValid } = useStepsCheck()
+  const { isValid } = useFormStorageChecker();
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +40,14 @@ export default function Feedback() {
 
         <Image src={"/bot.gif"} blurDataURL={"/bot.gif"} width={244} height={244} placeholder="blur" alt="robot gif" className="mx-auto" />
 
-        <a href="/" className="flex items-center justify-center w-fit mx-auto mt-auto mb-10 py-2 px-12 rounded text-center text-lg font-semibold outline-none transition sm:mb-0 bg-primary text-white hover:bg-primary-dark focus:bg-primary-dark">
+        <a
+          href="/"
+          className={clsx(
+            "flex items-center justify-center w-fit mx-auto mt-auto mb-10 py-2 px-12 rounded bg-primary outline-none transition sm:mb-0",
+            "text-center text-lg font-semibold text-white",
+            "hover:bg-primary-dark focus:bg-primary-dark"
+          )}
+        >
           Sair
         </a>
       </div>

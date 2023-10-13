@@ -3,12 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Photos } from "@/contexts/RegisterContext";
-import { useRegister } from "@/hooks/useRegister";
+import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
-import { FileUpload } from "@/components/file-upload";
+import { FileUpload } from "@/components/form/file-upload";
 import { Toast } from "@/components/radix/toast";
 import { DialogAlert } from "@/components/radix/dialog";
 
@@ -27,28 +26,17 @@ declare global {
 }
 
 export default function Foto() {
-  const { photos } = useRegister();
+  const { photos } = useFormStorage();
+  const router = useRouter();
 
   const [cameraAlert, setCameraAlert] = useState(false);
   const [toastActive, setToastActive] = useState(false);
   const [validationClicked, setValidationClicked] = useState(false);
 
-  // const [uploadErrors, setUploadErrors] = useState(false);
-
-  const router = useRouter();
-
   useEffect(() => {
     checkAccessToCamera();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   for (const category in photos) {
-  //     if (photos[category as keyof Photos].errors >= 3) {
-  //       setUploadErrors(true);
-  //       break;
-  //     }
-  //   }
-  // }, [photos]);
 
   async function checkAccessToCamera() {
     try {
@@ -106,11 +94,11 @@ export default function Foto() {
 
   return (
     <>
-      <div className="flex flex-col gap-1">
-        <Banner title="Envie as fotos da bike" description="Tire as fotos da sua bike para nossa IA analisá-las." />
-
-        <span className="text-sm font-semibold text-red">Lembre-se de tirar as fotos em um fundo neutro para facilitar a validação.</span>
-      </div>
+      <Banner.Root>
+        <Banner.Title>Envie as fotos da bike</Banner.Title>
+        <Banner.Text>Tire as fotos da sua bike para nossa IA analisá-las.</Banner.Text>
+        <Banner.Alert>Lembre-se de tirar as fotos em um fundo neutro para facilitar a validação.</Banner.Alert>
+      </Banner.Root>
 
       <div className="flex flex-col gap-4">
         {uploadFilesComponents.map(({ label, id }) => {
