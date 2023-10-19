@@ -1,13 +1,14 @@
 import { Button } from "@/components/button";
 
 interface ActionsProps {
+  to?: string;
   onStepCompletion: () => void;
 }
 
-export function Actions({ onStepCompletion }: ActionsProps) {
+export function Actions({ to = "/registro", onStepCompletion }: ActionsProps) {
   return (
     <>
-      <Button href="/registro" type="outline">
+      <Button href={to} type="outline">
         Voltar
       </Button>
 

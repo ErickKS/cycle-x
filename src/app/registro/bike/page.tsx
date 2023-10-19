@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import clsx from "clsx";
+import { ChevronRight } from "lucide-react";
 
 import { useValidate } from "@/hooks/useValidate";
 import { useFormStorage, Bike } from "@/hooks/useFormStorage";
@@ -10,7 +13,6 @@ import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { Select } from "@/components/form/select";
 import { Input } from "@/components/form/input";
-import { Accessory } from "@/components/layout/section-accessory";
 
 import { inputBikeLabels } from "@/constants/inputsTypes";
 import { selectBikeType, selectBikeBrand } from "@/constants/selectData";
@@ -165,7 +167,21 @@ export default function Bike() {
           })}
         </div>
 
-        <Accessory />
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-medium">Possui acessórios ou peças personalizadas?</h2>
+
+          <Link
+            href={"/registro/bike/detalhes"}
+            className={clsx(
+              "flex items-center justify-between w-full p-3 border-2 border-gray-light rounded outline-none transition",
+              "text-left text-lg",
+              "hover:bg-primary-light focus:bg-primary-light"
+            )}
+          >
+            Personalizações
+            <ChevronRight />
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 xs:grid-cols-2">
