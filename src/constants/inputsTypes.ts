@@ -62,7 +62,7 @@ export const inputBikeLabels = [
   },
 ];
 
-export const inputAccessoryLabels = [
+export const inputBikeItemsLabels = [
   {
     type: "text",
     id: "brand",

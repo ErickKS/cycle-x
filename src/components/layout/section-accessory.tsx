@@ -8,12 +8,12 @@ import { useFormStorage, Accessory } from "@/hooks/useFormStorage";
 
 import { Select } from "@/components/form/select";
 import { Input } from "@/components/form/input";
-import { DialogAccessory } from "@/components/radix/dialog";
+import { DialogBikeItem } from "@/components/radix/dialog";
 
 import { selectAccessory } from "@/constants/selectData";
-import { inputAccessoryLabels } from "@/constants/inputsTypes";
+import { inputBikeItemsLabels } from "@/constants/inputsTypes";
 
-interface AccessoryErrorProps {
+interface AccessoryAlertProps {
   brand: string;
   model: string;
   price: string;
@@ -22,17 +22,12 @@ interface AccessoryErrorProps {
 export function Accessory() {
   const { accessory, updateOrAddAccessoryData, deleteAccessory, setSelectedAccessory, selectedAccessory } = useFormStorage();
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogAccessory, setOpenDialogAccessory] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "edit" | null>(null);
-  const [openSelectAccessory, setOpenSelectAccessory] = useState(false);
-  const [selectedAccessoryType, setSelectedAccessoryType] = useState("");
 
-  const [accessorySelectAlert, setAccessorySelectAlert] = useState(false);
-  const [accessoryFieldsAlert, setAccessoryFieldsAlert] = useState<AccessoryErrorProps>({
-    brand: "",
-    model: "",
-    price: "",
-  });
+  const [openSelectAccessory, setOpenSelectAccessory] = useState(false);
+  const [selectAccessoryValue, setSelectAccessoryValue] = useState("");
+  const [selectAccessoryAlert, setSelectAccessoryAlert] = useState(false);
 
   const emptyAccessoryValues = {
     type: "",
@@ -40,26 +35,42 @@ export function Accessory() {
     model: { id: "", value: "" },
     price: { id: "", value: "" },
   };
-
   const [newAccessory, setNewAccessory] = useState<Accessory>(emptyAccessoryValues);
 
-  function handleAccessorySelectChange(newValue: string) {
+  const [accessoryFieldsAlert, setAccessoryFieldsAlert] = useState<AccessoryAlertProps>({
+    brand: "",
+    model: "",
+    price: "",
+  });
+
+  function handleOpenDialogAccessory(item: Accessory | null) {
+    if (item) {
+      setSelectedAccessory(item);
+      setDialogType("edit");
+    } else {
+      setDialogType("add");
+    }
+
+    setOpenDialogAccessory(true);
+  }
+
+  function handleSelectState() {
+    if (selectAccessoryAlert) setSelectAccessoryAlert(!selectAccessoryAlert);
+    setOpenSelectAccessory(!openSelectAccessory);
+  }
+
+  function handleSelectChange(newValue: string) {
     if (selectedAccessory !== null) {
       setSelectedAccessory({
         ...selectedAccessory,
         type: newValue,
       });
     } else {
-      setSelectedAccessoryType(newValue);
+      setSelectAccessoryValue(newValue);
     }
   }
 
-  function handleAccessorySelect() {
-    if (accessorySelectAlert) setAccessorySelectAlert(!accessorySelectAlert);
-    setOpenSelectAccessory(!openSelectAccessory);
-  }
-
-  function handleAccessoryInputChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value, id } = event.target;
 
     if (selectedAccessory !== null) {
@@ -79,17 +90,6 @@ export function Accessory() {
       [name]: +value <= 0 ? "Insira um valor válido" : !value ? "Campo obrigatório" : "",
     };
     setAccessoryFieldsAlert(updatedAlerts);
-  }
-
-  function openAccessoryDialog(item: Accessory | null) {
-    if (item) {
-      setSelectedAccessory(item);
-      setDialogType("edit");
-    } else {
-      setDialogType("add");
-    }
-
-    setOpenDialog(true);
   }
 
   function getFieldValues(accessory: Accessory, field: keyof Accessory) {
@@ -126,33 +126,33 @@ export function Accessory() {
 
       if (!isAllAccessoryFieldFilled) {
         updateOrAddAccessoryData(selectedAccessory, true);
-        setOpenDialog(false);
+        setOpenDialogAccessory(false);
       }
     } else {
       const isAllAccessoryFieldFilled = hasEmptyValues(newAccessory);
-      const isAccessoryTypeSelected = selectedAccessoryType !== "";
+      const isAccessoryTypeSelected = selectAccessoryValue !== "";
 
       if (!isAccessoryTypeSelected) {
-        setAccessorySelectAlert(true);
+        setSelectAccessoryAlert(true);
       }
 
       if (!isAllAccessoryFieldFilled && isAccessoryTypeSelected) {
         const newBikeAccessory = {
           ...newAccessory,
-          type: selectedAccessoryType,
+          type: selectAccessoryValue,
         } as Accessory;
         updateOrAddAccessoryData(newBikeAccessory, false);
 
         setNewAccessory(emptyAccessoryValues);
-        setSelectedAccessoryType("");
-        setOpenDialog(false);
+        setSelectAccessoryValue("");
+        setOpenDialogAccessory(false);
       }
     }
   }
 
-  function handleDeleteAccessory() {
+  function handleDelete() {
     deleteAccessory(selectedAccessory);
-    setOpenDialog(false);
+    setOpenDialogAccessory(false);
   }
 
   return (
@@ -166,7 +166,7 @@ export function Accessory() {
         >
           <span>{item.type}</span>
           <button
-            onClick={() => openAccessoryDialog(item)}
+            onClick={() => handleOpenDialogAccessory(item)}
             className="px-4 py-1 rounded-md bg-primary text-base text-white outline-none hover:bg-primary-dark focus:bg-primary-dark"
           >
             Editar
@@ -175,36 +175,36 @@ export function Accessory() {
       ))}
 
       <button
-        onClick={() => openAccessoryDialog(null)}
+        onClick={() => handleOpenDialogAccessory(null)}
         className={clsx(
           "flex items-center justify-between w-full p-3 border-2 border-gray-light rounded outline-none transition",
           "text-left text-lg",
-          "hover:bg-primary-light focus:bg-primary-light",
+          "hover:bg-primary-light focus:bg-primary-light"
         )}
       >
         Adicionar acessório
         <Plus />
       </button>
 
-      <DialogAccessory
-        open={openDialog}
-        setOpen={setOpenDialog}
+      <DialogBikeItem
+        open={openDialogAccessory}
+        setOpen={setOpenDialogAccessory}
         type={dialogType}
         title="acessório"
         onSubmit={handleSaveChanges}
-        onDelete={handleDeleteAccessory}
+        onDelete={handleDelete}
       >
         {selectedAccessory ? (
           <>
             <Select
               open={openSelectAccessory}
-              onOpenChange={handleAccessorySelect}
-              onValueChange={handleAccessorySelectChange}
+              onOpenChange={handleSelectState}
+              onValueChange={handleSelectChange}
               value={selectedAccessory.type}
               data={selectAccessory}
             />
 
-            {inputAccessoryLabels.map((input) => {
+            {inputBikeItemsLabels.map((input) => {
               const field = input.id as keyof Accessory;
               const fieldValues = getFieldValues(selectedAccessory, field);
 
@@ -216,8 +216,8 @@ export function Accessory() {
                   key={input.id}
                   label={input.label}
                   value={fieldValues.value}
-                  onChange={handleAccessoryInputChange}
-                  error={accessoryFieldsAlert[input.id as keyof AccessoryErrorProps]}
+                  onChange={handleInputChange}
+                  error={accessoryFieldsAlert[input.id as keyof AccessoryAlertProps]}
                   required
                 />
               ) : null;
@@ -227,14 +227,14 @@ export function Accessory() {
           <>
             <Select
               open={openSelectAccessory}
-              onOpenChange={handleAccessorySelect}
-              onValueChange={handleAccessorySelectChange}
-              value={selectedAccessoryType}
-              alert={accessorySelectAlert}
+              onOpenChange={handleSelectState}
+              onValueChange={handleSelectChange}
+              value={selectAccessoryValue}
+              alert={selectAccessoryAlert}
               data={selectAccessory}
             />
 
-            {inputAccessoryLabels.map((input) => {
+            {inputBikeItemsLabels.map((input) => {
               const field = input.id as keyof Accessory;
               const uniqueId = Math.random().toString(36).substring(7);
               const fieldValues = getFieldValues(newAccessory, field);
@@ -247,15 +247,15 @@ export function Accessory() {
                   key={input.id}
                   label={input.label}
                   value={fieldValues.value}
-                  onChange={handleAccessoryInputChange}
-                  error={accessoryFieldsAlert[input.id as keyof AccessoryErrorProps]}
+                  onChange={handleInputChange}
+                  error={accessoryFieldsAlert[input.id as keyof AccessoryAlertProps]}
                   required
                 />
               ) : null;
             })}
           </>
         )}
-      </DialogAccessory>
+      </DialogBikeItem>
     </div>
   );
 }

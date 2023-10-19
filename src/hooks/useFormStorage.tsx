@@ -57,6 +57,22 @@ export interface Accessory {
   };
 }
 
+export interface Part {
+  type: string;
+  brand: {
+    id: string;
+    value: string;
+  };
+  model: {
+    id: string;
+    value: string;
+  };
+  price: {
+    id: string;
+    value: number | string;
+  };
+}
+
 export interface Plan {
   name: string;
 }
@@ -91,6 +107,8 @@ interface Form {
   bike: Bike;
   accessory: Accessory[];
   selectedAccessory: Accessory | null;
+  part: Part[];
+  selectedPart: Part | null;
   plan: Plan;
   photos: Photos;
 
@@ -100,7 +118,11 @@ interface Form {
   setSelectedAccessory: (selectedAccessory: Accessory | null) => void;
   deleteAccessory: (accessoryData: Accessory | null) => void;
 
-  updatePhotos: (category: string, updateFunction: (prevPhoto: Photo) => Photo) => void
+  updateOrAddPartData: (partData: Part, isUpdate: boolean) => void;
+  setSelectedPart: (selectedPart: Part | null) => void;
+  deletePart: (partData: Part | null) => void;
+
+  updatePhotos: (category: string, updateFunction: (prevPhoto: Photo) => Photo) => void;
 }
 
 export const useFormStorage = create<Form>((set) => ({
@@ -109,6 +131,8 @@ export const useFormStorage = create<Form>((set) => ({
   bike: initialBike,
   accessory: [] as Accessory[],
   selectedAccessory: null,
+  part: [] as Part[],
+  selectedPart: null,
   plan: initialPlan,
   photos: initialPhotos,
 
@@ -134,16 +158,47 @@ export const useFormStorage = create<Form>((set) => ({
         return { accessory: updatedAccessoryList, selectedAccessory: null };
       }
     }),
+
   setSelectedAccessory: (selectedAccessory: Accessory | null) =>
     set((state) => ({
       ...state,
       selectedAccessory,
     })),
+
   deleteAccessory: (accessoryData: Accessory | null) =>
     set((state) => {
       const { accessory } = state;
       const updatedAccessoryList = accessory.filter((item) => item.model.id !== accessoryData?.model.id);
       return { accessory: updatedAccessoryList, selectedAccessory: null };
+    }),
+
+  // Part actions
+  updateOrAddPartData: (partData: Part, isUpdate: boolean) =>
+    set((state) => {
+      const { part } = state;
+      const index = part.findIndex((item) => item.model.id === partData.model.id);
+
+      if (isUpdate && index !== -1) {
+        const updatedPartList = [...part];
+        updatedPartList[index] = partData;
+        return { part: updatedPartList, selectedPart: null };
+      } else {
+        const updatedPartList = [...part, partData];
+        return { part: updatedPartList, selectedPart: null };
+      }
+    }),
+
+  setSelectedPart: (selectedPart: Part | null) =>
+    set((state) => ({
+      ...state,
+      selectedPart,
+    })),
+
+  deletePart: (partData: Part | null) =>
+    set((state) => {
+      const { part } = state;
+      const updatedPartList = part.filter((item) => item.model.id !== partData?.model.id);
+      return { part: updatedPartList, selectedPart: null };
     }),
 
   // Photos actions

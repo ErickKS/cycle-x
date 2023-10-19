@@ -64,7 +64,7 @@ interface DialogAccessoryProps extends DialogProps {
   onDelete: () => void;
 }
 
-export function DialogAccessory({ open, setOpen, title, type, onSubmit, onDelete, children }: DialogAccessoryProps) {
+export function DialogBikeItem({ open, setOpen, title, type, onSubmit, onDelete, children }: DialogAccessoryProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Portal>
