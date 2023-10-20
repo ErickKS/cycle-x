@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import Image from "next/image";
+import { useState, ChangeEvent, useRef, KeyboardEvent } from "react";
 import clsx from "clsx";
 import { Plus } from "lucide-react";
 
@@ -22,14 +23,20 @@ interface AccessoryAlertProps {
 export function Accessory() {
   const { accessory, updateOrAddAccessoryData, deleteAccessory, setSelectedAccessory, selectedAccessory } = useFormStorage();
 
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
+  const photoRef = useRef<HTMLImageElement | null>(null);
+
   const [openDialogAccessory, setOpenDialogAccessory] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "edit" | null>(null);
+
+  const [photoAlertAccessory, setPhotoAlertAccessory] = useState(false);
 
   const [openSelectAccessory, setOpenSelectAccessory] = useState(false);
   const [selectAccessoryValue, setSelectAccessoryValue] = useState("");
   const [selectAccessoryAlert, setSelectAccessoryAlert] = useState(false);
 
   const emptyAccessoryValues = {
+    photo: { file: null, previewURL: "" },
     type: "",
     brand: { id: "", value: "" },
     model: { id: "", value: "" },
@@ -52,6 +59,39 @@ export function Accessory() {
     }
 
     setOpenDialogAccessory(true);
+  }
+
+  function handleLabelKeyDown(event: KeyboardEvent<HTMLLabelElement>) {
+    if (event.key === "Enter" && inputFileRef.current) inputFileRef.current.click();
+  }
+
+  function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
+    const { files } = event.target;
+
+    if (!files) return;
+
+    setPhotoAlertAccessory(false);
+
+    const file = files[0];
+    const url = URL.createObjectURL(file);
+
+    if (selectedAccessory !== null) {
+      setSelectedAccessory({
+        ...selectedAccessory,
+        photo: { file, previewURL: url },
+      });
+    } else {
+      photoRef.current?.setAttribute("src", url);
+      photoRef.current?.setAttribute("fill", "true");
+      photoRef.current?.removeAttribute("height");
+      photoRef.current?.removeAttribute("width");
+      photoRef.current?.nextElementSibling?.classList.add("none");
+
+      setNewAccessory({
+        ...newAccessory,
+        photo: { file, previewURL: url },
+      });
+    }
   }
 
   function handleSelectState() {
@@ -92,7 +132,7 @@ export function Accessory() {
     setAccessoryFieldsAlert(updatedAlerts);
   }
 
-  function getFieldValues(accessory: Accessory, field: keyof Accessory) {
+  function getFieldValues(accessory: Accessory, field: "brand" | "model" | "price") {
     const fieldValue = accessory[field];
 
     if (fieldValue && typeof fieldValue === "object") {
@@ -132,6 +172,10 @@ export function Accessory() {
       const isAllAccessoryFieldFilled = hasEmptyValues(newAccessory);
       const isAccessoryTypeSelected = selectAccessoryValue !== "";
 
+      if (newAccessory.photo.file === null || newAccessory.photo.previewURL === null) {
+        setPhotoAlertAccessory(true);
+      }
+
       if (!isAccessoryTypeSelected) {
         setSelectAccessoryAlert(true);
       }
@@ -142,6 +186,12 @@ export function Accessory() {
           type: selectAccessoryValue,
         } as Accessory;
         updateOrAddAccessoryData(newBikeAccessory, false);
+
+        photoRef.current?.setAttribute("src", "/camera.svg");
+        photoRef.current?.setAttribute("height", "48");
+        photoRef.current?.setAttribute("width", "48");
+        photoRef.current?.removeAttribute("fill");
+        photoRef.current?.nextElementSibling?.classList.add("block");
 
         setNewAccessory(emptyAccessoryValues);
         setSelectAccessoryValue("");
@@ -196,6 +246,35 @@ export function Accessory() {
       >
         {selectedAccessory ? (
           <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-medium">Foto da peça</h2>
+
+              <label
+                htmlFor="accessory"
+                tabIndex={0}
+                onKeyDown={handleLabelKeyDown}
+                className={clsx(
+                  "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full px-2 py-2 border-2 rounded overflow-hidden cursor-pointer outline-none transition",
+                  "hover:bg-primary-light focus:border-primary focus:bg-primary-light group-focus-within:bg-primary-light",
+                  { "border-red": photoAlertAccessory },
+                  { "border-gray-light": !photoAlertAccessory }
+                )}
+              >
+                <Image src={selectedAccessory.photo.previewURL} alt="" fill className="object-cover" />
+              </label>
+
+              <input
+                id="accessory"
+                ref={inputFileRef}
+                type="file"
+                name="accessory"
+                onChange={handleImageUpload}
+                accept="image/*"
+                capture="environment"
+                className="invisible absolute inset-0 cursor-pointer opacity-0"
+              />
+            </div>
+
             <Select
               open={openSelectAccessory}
               onOpenChange={handleSelectState}
@@ -205,7 +284,7 @@ export function Accessory() {
             />
 
             {inputBikeItemsLabels.map((input) => {
-              const field = input.id as keyof Accessory;
+              const field = input.id as "brand" | "model" | "price";
               const fieldValues = getFieldValues(selectedAccessory, field);
 
               return newAccessory[field] !== undefined ? (
@@ -225,6 +304,47 @@ export function Accessory() {
           </>
         ) : (
           <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-medium">Foto da peça</h2>
+
+              <div className="group relative">
+                <label
+                  htmlFor="accessory"
+                  tabIndex={1}
+                  onKeyDown={handleLabelKeyDown}
+                  className={clsx(
+                    "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full py-2 border-2 rounded overflow-hidden cursor-pointer outline-none",
+                    "hover:bg-primary-light focus:border-primary focus:bg-primary-light group-focus-within:bg-primary-light",
+                    { "border-red": photoAlertAccessory },
+                    { "border-gray-light": !photoAlertAccessory }
+                  )}
+                >
+                  <Image
+                    ref={photoRef}
+                    src={"/camera.svg"}
+                    blurDataURL={"/camera.svg"}
+                    height={48}
+                    width={48}
+                    placeholder="blur"
+                    alt="h-auto w-auto rounded"
+                  />
+
+                  <span className="text-center font-medium">Clique para ativar a câmera</span>
+                </label>
+
+                <input
+                  id="accessory"
+                  ref={inputFileRef}
+                  type="file"
+                  name="accessory"
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  capture="environment"
+                  className="invisible absolute inset-0 cursor-pointer opacity-0"
+                />
+              </div>
+            </div>
+
             <Select
               open={openSelectAccessory}
               onOpenChange={handleSelectState}
@@ -235,7 +355,7 @@ export function Accessory() {
             />
 
             {inputBikeItemsLabels.map((input) => {
-              const field = input.id as keyof Accessory;
+              const field = input.id as "brand" | "model" | "price";
               const uniqueId = Math.random().toString(36).substring(7);
               const fieldValues = getFieldValues(newAccessory, field);
 

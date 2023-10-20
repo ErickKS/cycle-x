@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, ChangeEvent, useEffect } from "react";
+import Image from "next/image";
+import { useState, ChangeEvent, useRef, KeyboardEvent } from "react";
 import clsx from "clsx";
 import { Plus } from "lucide-react";
 
@@ -22,14 +23,20 @@ interface PartAlertProps {
 export function Part() {
   const { part, updateOrAddPartData, deletePart, setSelectedPart, selectedPart } = useFormStorage();
 
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
+  const photoRef = useRef<HTMLImageElement | null>(null);
+
   const [openDialogPart, setOpenDialogPart] = useState(false);
   const [dialogType, setDialogType] = useState<"add" | "edit" | null>(null);
+
+  const [photoAlertPart, setPhotoAlertPart] = useState(false);
 
   const [openSelectPart, setOpenSelectPart] = useState(false);
   const [selectValuePart, setSelectValuePart] = useState("");
   const [selectAlertPart, setSelectAlertPart] = useState(false);
 
   const emptyPartValues = {
+    photo: { file: null, previewURL: "" },
     type: "",
     brand: { id: "", value: "" },
     model: { id: "", value: "" },
@@ -52,6 +59,39 @@ export function Part() {
     }
 
     setOpenDialogPart(true);
+  }
+
+  function handleLabelKeyDown(event: KeyboardEvent<HTMLLabelElement>) {
+    if (event.key === "Enter" && inputFileRef.current) inputFileRef.current.click();
+  }
+
+  function handleImageUpload(event: ChangeEvent<HTMLInputElement>) {
+    const { files } = event.target;
+
+    if (!files) return;
+
+    setPhotoAlertPart(false);
+
+    const file = files[0];
+    const url = URL.createObjectURL(file);
+
+    if (selectedPart !== null) {
+      setSelectedPart({
+        ...selectedPart,
+        photo: { file, previewURL: url },
+      });
+    } else {
+      photoRef.current?.setAttribute("src", url);
+      photoRef.current?.setAttribute("fill", "true");
+      photoRef.current?.removeAttribute("height");
+      photoRef.current?.removeAttribute("width");
+      photoRef.current?.nextElementSibling?.classList.add("none");
+
+      setNewPart({
+        ...newPart,
+        photo: { file, previewURL: url },
+      });
+    }
   }
 
   function handleSelectState() {
@@ -92,7 +132,7 @@ export function Part() {
     setPartFieldsAlert(updatedAlerts);
   }
 
-  function getFieldValues(part: Part, field: keyof Part) {
+  function getFieldValues(part: Part, field: "brand" | "model" | "price") {
     const fieldValue = part[field];
 
     if (fieldValue && typeof fieldValue === "object") {
@@ -132,6 +172,10 @@ export function Part() {
       const isAllPartFieldFilled = hasEmptyValues(newPart);
       const isPartTypeSelected = selectValuePart !== "";
 
+      if (newPart.photo.file === null || newPart.photo.previewURL === null) {
+        setPhotoAlertPart(true);
+      }
+
       if (!isPartTypeSelected) {
         setSelectAlertPart(true);
       }
@@ -143,6 +187,12 @@ export function Part() {
         } as Part;
         updateOrAddPartData(newBikePart, false);
 
+        photoRef.current?.setAttribute("src", "/camera.svg");
+        photoRef.current?.setAttribute("height", "48");
+        photoRef.current?.setAttribute("width", "48");
+        photoRef.current?.removeAttribute("fill");
+        photoRef.current?.nextElementSibling?.classList.add("block");
+        
         setNewPart(emptyPartValues);
         setSelectValuePart("");
         setOpenDialogPart(false);
@@ -196,6 +246,35 @@ export function Part() {
       >
         {selectedPart ? (
           <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-medium">Foto da peça</h2>
+
+              <label
+                htmlFor="part"
+                tabIndex={0}
+                onKeyDown={handleLabelKeyDown}
+                className={clsx(
+                  "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full px-2 py-2 border-2 rounded overflow-hidden cursor-pointer outline-none transition",
+                  "hover:bg-primary-light focus:border-primary focus:bg-primary-light group-focus-within:bg-primary-light",
+                  { "border-red": photoAlertPart },
+                  { "border-gray-light": !photoAlertPart }
+                )}
+              >
+                <Image src={selectedPart.photo.previewURL} alt="" fill className="object-cover" />
+              </label>
+
+              <input
+                id="part"
+                ref={inputFileRef}
+                type="file"
+                name="part"
+                onChange={handleImageUpload}
+                accept="image/*"
+                capture="environment"
+                className="invisible absolute inset-0 cursor-pointer opacity-0"
+              />
+            </div>
+
             <Select
               open={openSelectPart}
               onOpenChange={handleSelectState}
@@ -205,7 +284,7 @@ export function Part() {
             />
 
             {inputBikeItemsLabels.map((input) => {
-              const field = input.id as keyof Part;
+              const field = input.id as "brand" | "model" | "price";
               const fieldValues = getFieldValues(selectedPart, field);
 
               return newPart[field] !== undefined ? (
@@ -225,6 +304,47 @@ export function Part() {
           </>
         ) : (
           <>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-lg font-medium">Foto da peça</h2>
+
+              <div className="group relative">
+                <label
+                  htmlFor="part"
+                  tabIndex={1}
+                  onKeyDown={handleLabelKeyDown}
+                  className={clsx(
+                    "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full py-2 border-2 rounded overflow-hidden cursor-pointer outline-none",
+                    "hover:bg-primary-light focus:border-primary focus:bg-primary-light group-focus-within:bg-primary-light",
+                    { "border-red": photoAlertPart },
+                    { "border-gray-light": !photoAlertPart }
+                  )}
+                >
+                  <Image
+                    ref={photoRef}
+                    src={"/camera.svg"}
+                    blurDataURL={"/camera.svg"}
+                    height={48}
+                    width={48}
+                    placeholder="blur"
+                    alt="h-auto w-auto rounded"
+                  />
+
+                  <span className="text-center font-medium">Clique para ativar a câmera</span>
+                </label>
+
+                <input
+                  id="part"
+                  ref={inputFileRef}
+                  type="file"
+                  name="part"
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  capture="environment"
+                  className="invisible absolute inset-0 cursor-pointer opacity-0"
+                />
+              </div>
+            </div>
+
             <Select
               open={openSelectPart}
               onOpenChange={handleSelectState}
@@ -235,7 +355,7 @@ export function Part() {
             />
 
             {inputBikeItemsLabels.map((input) => {
-              const field = input.id as keyof Part;
+              const field = input.id as "brand" | "model" | "price";
               const uniqueId = Math.random().toString(36).substring(7);
               const fieldValues = getFieldValues(newPart, field);
 

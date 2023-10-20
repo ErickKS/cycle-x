@@ -42,6 +42,10 @@ const initialBike = {
 };
 
 export interface Accessory {
+  photo: {
+    file: File | null;
+    previewURL: string;
+  };
   type: string;
   brand: {
     id: string;
@@ -58,6 +62,10 @@ export interface Accessory {
 }
 
 export interface Part {
+  photo: {
+    file: File | null;
+    previewURL: string;
+  };
   type: string;
   brand: {
     id: string;
