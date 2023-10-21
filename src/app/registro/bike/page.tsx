@@ -97,6 +97,19 @@ export default function Bike() {
     }
   }
 
+  // ========== SAVING CHANGES (DATA LOSS PREVENTION)
+  function savingChanges() {
+    const newBikeData = {
+      ...validationBike.values,
+      type: selectedBikeType,
+      brand: selectedBikeBrand,
+    } as Bike;
+
+    updateDataByStage("bike", newBikeData);
+
+    router.push("/registro/bike/detalhes");
+  }
+
   // ========== SUBMIT STEP
   function handleBikeDocs() {
     if (!selectedBikeType) setSelectedBikeTypeAlert(true);
@@ -170,8 +183,8 @@ export default function Bike() {
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-medium">Possui acessórios ou peças personalizadas?</h2>
 
-          <Link
-            href={"/registro/bike/detalhes"}
+          <button
+            onClick={savingChanges}
             className={clsx(
               "flex items-center justify-between w-full p-3 border-2 border-gray-light rounded outline-none transition",
               "text-left text-lg",
@@ -180,7 +193,7 @@ export default function Bike() {
           >
             Personalizações
             <ChevronRight />
-          </Link>
+          </button>
         </div>
       </div>
 

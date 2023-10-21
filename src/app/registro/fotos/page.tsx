@@ -34,7 +34,7 @@ export default function Foto() {
   const [validationClicked, setValidationClicked] = useState(false);
 
   useEffect(() => {
-    checkAccessToCamera();
+    // checkAccessToCamera();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
