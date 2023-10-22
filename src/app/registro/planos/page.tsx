@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useState } from "react";
 import { Bike, Crown, Medal } from "lucide-react";
 
 import { useFormStorage, Plan } from "@/hooks/useFormStorage";
@@ -15,23 +15,11 @@ export default function Planos() {
   const router = useRouter();
 
   const [selectedPlan, setSelectedPlan] = useState(plan.name);
-  const [alertPlan, activeAlertPlan] = useState(false);
-
-  function handleRadioChange(event: ChangeEvent<HTMLInputElement>) {
-    if (alertPlan) activeAlertPlan(false);
-    setSelectedPlan(event.target.value);
-  }
-
-  function handleRadioKeyPress(event: KeyboardEvent<HTMLLabelElement>) {
-    const { currentTarget, key } = event;
-    const input = currentTarget.querySelector("input");
-
-    if (input && (key === " " || key === "Enter")) setSelectedPlan(input.value);
-  }
+  const [alertPlan, setAlertPlan] = useState(false);
 
   function handleSelectedPlan() {
     if (!selectedPlan) {
-      activeAlertPlan(true);
+      setAlertPlan(true);
       return;
     }
 
@@ -53,10 +41,10 @@ export default function Planos() {
           id="pedal-essencial"
           name="plans"
           icon={Bike}
-          onChange={handleRadioChange}
-          onKeyDown={handleRadioKeyPress}
+          planValue={setSelectedPlan}
           checked={selectedPlan === "pedal-essencial"}
           alert={alertPlan}
+          alertFunction={setAlertPlan}
         >
           <Radio.Title>Pedal Essencial</Radio.Title>
 
@@ -67,10 +55,10 @@ export default function Planos() {
           id="pedal-leve"
           name="plans"
           icon={Medal}
-          onChange={handleRadioChange}
-          onKeyDown={handleRadioKeyPress}
+          planValue={setSelectedPlan}
           checked={selectedPlan === "pedal-leve"}
           alert={alertPlan}
+          alertFunction={setAlertPlan}
         >
           <Radio.Title>Pedal Leve</Radio.Title>
 
@@ -81,10 +69,10 @@ export default function Planos() {
           id="pedal-elite"
           name="plans"
           icon={Crown}
-          onChange={handleRadioChange}
-          onKeyDown={handleRadioKeyPress}
+          planValue={setSelectedPlan}
           checked={selectedPlan === "pedal-elite"}
           alert={alertPlan}
+          alertFunction={setAlertPlan}
         >
           <Radio.Title>Pedal Elite</Radio.Title>
 
