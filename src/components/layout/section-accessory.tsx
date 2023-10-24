@@ -73,6 +73,9 @@ export function Accessory() {
     setPhotoAlertAccessory(false);
 
     const file = files[0];
+
+    if (!file) return;
+
     const url = URL.createObjectURL(file);
 
     if (selectedAccessory !== null) {
@@ -187,7 +190,7 @@ export function Accessory() {
         } as Accessory;
         updateOrAddAccessoryData(newBikeAccessory, false);
 
-        photoRef.current?.setAttribute("src", "/camera.svg");
+        photoRef.current?.setAttribute("src", "/svg/camera.svg");
         photoRef.current?.setAttribute("height", "48");
         photoRef.current?.setAttribute("width", "48");
         photoRef.current?.removeAttribute("fill");
@@ -321,8 +324,8 @@ export function Accessory() {
                 >
                   <Image
                     ref={photoRef}
-                    src={"/camera.svg"}
-                    blurDataURL={"/camera.svg"}
+                    src={"/svg/camera.svg"}
+                    blurDataURL={"/svg/camera.svg"}
                     height={48}
                     width={48}
                     placeholder="blur"

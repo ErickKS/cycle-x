@@ -73,6 +73,9 @@ export function Part() {
     setPhotoAlertPart(false);
 
     const file = files[0];
+
+    if (!file) return;
+
     const url = URL.createObjectURL(file);
 
     if (selectedPart !== null) {
@@ -187,12 +190,12 @@ export function Part() {
         } as Part;
         updateOrAddPartData(newBikePart, false);
 
-        photoRef.current?.setAttribute("src", "/camera.svg");
+        photoRef.current?.setAttribute("src", "/svg/camera.svg");
         photoRef.current?.setAttribute("height", "48");
         photoRef.current?.setAttribute("width", "48");
         photoRef.current?.removeAttribute("fill");
         photoRef.current?.nextElementSibling?.classList.add("block");
-        
+
         setNewPart(emptyPartValues);
         setSelectValuePart("");
         setOpenDialogPart(false);
@@ -321,8 +324,8 @@ export function Part() {
                 >
                   <Image
                     ref={photoRef}
-                    src={"/camera.svg"}
-                    blurDataURL={"/camera.svg"}
+                    src={"/svg/camera.svg"}
+                    blurDataURL={"/svg/camera.svg"}
                     height={48}
                     width={48}
                     placeholder="blur"

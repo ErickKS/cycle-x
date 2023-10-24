@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 
@@ -29,13 +30,39 @@ export default function Foto() {
   const { photos } = useFormStorage();
   const router = useRouter();
 
+  const [loading, setLoading] = useState({ loading: true, progress: 0 });
+  const [model, setModel] = useState({ net: null, inputShape: [1, 0, 0, 3] });
+  const modelName = "best";
+
   const [cameraAlert, setCameraAlert] = useState(false);
   const [toastActive, setToastActive] = useState(false);
   const [validationClicked, setValidationClicked] = useState(false);
 
+  // useEffect(() => {
+  //   // checkAccessToCamera();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   useEffect(() => {
-    checkAccessToCamera();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    tf.ready().then(async () => {
+      const yolov8 = await tf.loadGraphModel(`/${modelName}_web_model/model.json`, {
+        onProgress: (fractions) => {
+          setLoading({ loading: true, progress: fractions });
+        },
+      });
+
+      // @ts-ignore
+      const dummyInput = tf.ones(yolov8.inputs[0].shape);
+      const warmupResults = yolov8.execute(dummyInput);
+
+      setLoading({ loading: false, progress: 1 });
+      // @ts-ignore
+      setModel({ net: yolov8, inputShape: yolov8.inputs[0].shape });
+
+      tf.dispose([warmupResults, dummyInput]);
+
+      console.log("carregado");
+    });
   }, []);
 
   async function checkAccessToCamera() {
@@ -97,7 +124,7 @@ export default function Foto() {
       <Banner.Root>
         <Banner.Title>Envie as fotos da bike</Banner.Title>
         <Banner.Text>Tire as fotos da sua bike para nossa IA analisá-las.</Banner.Text>
-        <Banner.Alert>Lembre-se de tirar as fotos em um fundo neutro para facilitar a validação.</Banner.Alert>
+        <Banner.Alert>Lembre-se de tirar uma foto da bicicleta inteira em um fundo neutro para facilitar a validação.</Banner.Alert>
       </Banner.Root>
 
       <div className="flex flex-col gap-4">
@@ -109,7 +136,7 @@ export default function Foto() {
             <div className="space-y-1" key={id}>
               <h2 className="text-lg font-medium">{label}</h2>
 
-              <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} />
+              <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} model={model} />
             </div>
           );
         })}
