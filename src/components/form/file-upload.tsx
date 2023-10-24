@@ -64,6 +64,8 @@ export function FileUpload({ category, requirement, model }: FileUploadProps) {
       } else {
         handleProcessResult("invalid");
       }
+
+      URL.revokeObjectURL(img.src);
     };
   }
 
