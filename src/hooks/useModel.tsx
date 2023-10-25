@@ -11,8 +11,8 @@ export const useModel = create<Model>((set) => ({
   session: null,
 
   getModel: async () => {
-    const MODEL_URL = "./_next/static/chunks/app/registro/best.onnx";
-    const MODEL_URL_2 = "./_next/static/chunks/app/registro/nms-yolov8.onnx";
+    const MODEL_URL = "../model/best.onnx";
+    const MODEL_URL_2 = "../model/nms-yolov8.onnx";
     const MODEL_SHAPES = [1, 3, 256, 256];
 
     const arrBufNet = await downloadBuf(MODEL_URL);
