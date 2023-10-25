@@ -1,22 +1,22 @@
 import NextImage from "next/image";
 import { useRef, ChangeEvent, KeyboardEvent } from "react";
+import { InferenceSession } from "onnxruntime-web";
 import clsx from "clsx";
-
-import { detect } from "../../utils/detect";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 import { detectionResultVerification } from "@/hooks/detectionResultVerification";
 
 import { Status, statusOfValidation } from "@/constants/statusValidation";
 import { SpinIcon } from "../spin-icon";
+import { detectImage } from "@/utils/detect";
 
 interface FileUploadProps {
   category: keyof Photos;
   requirement?: boolean;
-  model: any;
+  session?: { net: InferenceSession; nms: InferenceSession } | null;
 }
 
-export function FileUpload({ category, requirement, model }: FileUploadProps) {
+export function FileUpload({ category, requirement, session }: FileUploadProps) {
   const { photos, updatePhotos } = useFormStorage();
   const selectedPhoto = photos[category];
   const selectedStatus = statusOfValidation[selectedPhoto.status as Status];
@@ -51,7 +51,7 @@ export function FileUpload({ category, requirement, model }: FileUploadProps) {
     img.src = URL.createObjectURL(file);
 
     img.onload = async () => {
-      const result = await detect(img, model);
+      const result = await detectImage(img, session);
       const validation = detectionResultVerification(result);
 
       if (validation.state) {

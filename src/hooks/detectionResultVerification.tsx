@@ -1,32 +1,33 @@
-interface detectionResult {
-  klass: string;
-  score: string;
+interface DetectionResult {
+  label: number;
+  confidence: number;
 }
 
-export function detectionResultVerification(result: detectionResult[]) {
-  const requiredClasses = new Set(["bike-left", "bike-right", "crown", "saddle", "handlebar", "wheel"]);
-  const klassCount: { [klass: string]: number } = {};
+export function detectionResultVerification(results: DetectionResult[]) {
+  const requiredItems = new Set(["0", "1", "2", "3", "4", "5"]);
+  const itemCount: { [item: string]: number } = {};
   let bikeSide: string | null = null;
 
-  result.forEach((item) => {
-    if (requiredClasses.has(item.klass)) {
-      if (klassCount[item.klass]) {
-        klassCount[item.klass]++;
+  results.forEach((result) => {
+    const labelString = result.label.toString();
+    if (requiredItems.has(labelString)) {
+      if (itemCount[labelString]) {
+        itemCount[labelString]++;
       } else {
-        klassCount[item.klass] = 1;
+        itemCount[labelString] = 1;
       }
-      if (item.klass === "bike-left" || item.klass === "bike-right") {
-        bikeSide = item.klass;
+      if (labelString === "0" || labelString === "1") {
+        bikeSide = labelString === "0" ? "bike-left" : "bike-right";
       }
     }
   });
 
   if (
-    (klassCount["bike-left"] || klassCount["bike-right"]) === 1 &&
-    klassCount["crown"] === 1 &&
-    klassCount["saddle"] === 1 &&
-    klassCount["handlebar"] === 1 &&
-    klassCount["wheel"] === 2
+    (itemCount["0"] || itemCount["1"]) === 1 && // At least 1 of 'bike-left' or 'bike-right'
+    itemCount["2"] === 1 && // 1 'crown'
+    itemCount["3"] === 1 && // 1 'handlebar'
+    itemCount["4"] === 1 && // 1 'saddle'
+    itemCount["5"] === 2 // 2 'wheel'
   ) {
     return { state: true, bikeSide };
   } else {

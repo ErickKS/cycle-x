@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import * as tf from "@tensorflow/tfjs";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 
@@ -13,6 +12,7 @@ import { Toast } from "@/components/radix/toast";
 // import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
+import { useModel } from "@/hooks/useModel";
 
 // declare global {
 //   interface Window {
@@ -28,10 +28,13 @@ import { uploadFilesComponents } from "@/constants/uploadFiles";
 
 export default function Foto() {
   const { photos } = useFormStorage();
+  const { session, getModel } = useModel();
   const router = useRouter();
 
-  const [model, setModel] = useState({ net: null, inputShape: [1, 0, 0, 3] });
-  const modelName = "best";
+  useEffect(() => {
+    if (!session) getModel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const [cameraAlert, setCameraAlert] = useState(false);
   const [toastActive, setToastActive] = useState(false);
@@ -41,23 +44,6 @@ export default function Foto() {
   //   // checkAccessToCamera();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
-
-  useEffect(() => {
-    tf.ready().then(async () => {
-      const yolov8 = await tf.loadGraphModel(`/${modelName}_web_model/model.json`);
-
-      // @ts-ignore
-      const dummyInput = tf.ones(yolov8.inputs[0].shape);
-      const warmupResults = yolov8.execute(dummyInput);
-
-      // @ts-ignore
-      setModel({ net: yolov8, inputShape: yolov8.inputs[0].shape });
-
-      tf.dispose([warmupResults, dummyInput]);
-
-      console.log("carregado");
-    });
-  }, []);
 
   // async function checkAccessToCamera() {
   //   try {
@@ -129,8 +115,8 @@ export default function Foto() {
           return (
             <div className="space-y-1" key={id}>
               <h2 className="text-lg font-medium">{label}</h2>
-
-              <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} model={model} />
+              {!session && "carregando"}
+              <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} session={session} />
             </div>
           );
         })}
