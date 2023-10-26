@@ -43,9 +43,9 @@ export default function Foto() {
   }, []);
 
   async function initialChecks() {
-    getCamera();
-
     if (!hasCamera) {
+      getCamera();
+
       setCameraAlert(true);
       return;
     }
