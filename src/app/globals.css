@@ -35,8 +35,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* RADIX SELECT */
 .SelectContent {
+  position: relative;
+  z-index: 10;
   width: var(--radix-select-trigger-width);
-  max-height: var(--radix-select-content-available-height);
+  max-height: 160px;
 }
 
 /* CHATBOT */

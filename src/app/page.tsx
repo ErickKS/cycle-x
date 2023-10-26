@@ -1,27 +1,28 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+import { useCamera } from "@/hooks/useCamera";
 
 import { Copyright } from "@/components/layout/copyright";
 import { Button } from "@/components/button";
 import { DialogAlert } from "@/components/radix/dialog";
 
 export default function Home() {
+  const { hasCamera, getCamera } = useCamera();
   const [cameraAlert, setCameraAlert] = useState(false);
   const router = useRouter();
 
   async function checkAccessToCamera() {
-    // try {
-    //   const mediaCamera = await navigator.mediaDevices.getUserMedia({
-    //     video: { facingMode: "environment" },
-    //   });
-    //   mediaCamera.getTracks().forEach((track) => track.stop());
-    //   router.push("/registro");
-    // } catch {
-    //   setCameraAlert(!cameraAlert);
-    // }
+    getCamera();
+
+    if (!hasCamera) {
+      setCameraAlert(true);
+      return;
+    }
+
     router.push("/registro");
   }
 

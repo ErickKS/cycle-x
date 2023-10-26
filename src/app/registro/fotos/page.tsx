@@ -4,80 +4,77 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
+import { useCamera } from "@/hooks/useCamera";
 
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { FileUpload } from "@/components/form/file-upload";
 import { Toast } from "@/components/radix/toast";
-// import { DialogAlert } from "@/components/radix/dialog";
+import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
 import { useModel } from "@/hooks/useModel";
 
-// declare global {
-//   interface Window {
-//     watsonAssistantChatOptions: {
-//       onLoad: (instance: any) => void;
-//       integrationID: string;
-//       region: string;
-//       serviceInstanceID: string;
-//       clientVersion?: string;
-//     };
-//   }
-// }
+declare global {
+  interface Window {
+    watsonAssistantChatOptions: {
+      onLoad: (instance: any) => void;
+      integrationID: string;
+      region: string;
+      serviceInstanceID: string;
+      clientVersion?: string;
+    };
+  }
+}
 
 export default function Foto() {
   const { photos } = useFormStorage();
   const { session, getModel } = useModel();
+  const { hasCamera, getCamera } = useCamera();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!session) getModel();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // const [cameraAlert, setCameraAlert] = useState(false);
+  const [cameraAlert, setCameraAlert] = useState(false);
   const [toastActive, setToastActive] = useState(false);
   const [validationClicked, setValidationClicked] = useState(false);
 
-  // useEffect(() => {
-  //   // checkAccessToCamera();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    initialChecks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // async function checkAccessToCamera() {
-  //   try {
-  //     const mediaCamera = await navigator.mediaDevices.getUserMedia({
-  //       video: { facingMode: "environment" },
-  //     });
+  async function initialChecks() {
+    getCamera();
 
-  //     mediaCamera.getTracks().forEach((track) => track.stop());
-  //     loadChatbot();
-  //   } catch {
-  //     setCameraAlert(true);
-  //   }
-  // }
+    if (!hasCamera) {
+      setCameraAlert(true);
+      return;
+    }
 
-  // function loadChatbot() {
-  //   if (!cameraAlert) {
-  //     window.watsonAssistantChatOptions = {
-  //       integrationID: "c4046c4b-bd4a-4b56-b971-324597740d1e",
-  //       region: "us-south",
-  //       serviceInstanceID: "a18024a7-c4ce-46e1-adc9-db758cf2cb4f",
-  //       onLoad: (instance: any) => instance.render(),
-  //     };
+    if (!session) getModel();
 
-  //     if (!document.querySelector('script[src*="WatsonAssistantChatEntry.js"]')) {
-  //       const chatbot = document.createElement("script");
+    loadChatbot();
+  }
 
-  //       chatbot.src =
-  //         "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +
-  //         (window.watsonAssistantChatOptions.clientVersion || "latest") +
-  //         "/WatsonAssistantChatEntry.js";
-  //       document.head.appendChild(chatbot);
-  //     }
-  //   }
-  // }
+  function loadChatbot() {
+    if (!cameraAlert) {
+      window.watsonAssistantChatOptions = {
+        integrationID: "c4046c4b-bd4a-4b56-b971-324597740d1e",
+        region: "us-south",
+        serviceInstanceID: "a18024a7-c4ce-46e1-adc9-db758cf2cb4f",
+        onLoad: (instance: any) => instance.render(),
+      };
+
+      if (!document.querySelector('script[src*="WatsonAssistantChatEntry.js"]')) {
+        const chatbot = document.createElement("script");
+
+        chatbot.src =
+          "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +
+          (window.watsonAssistantChatOptions.clientVersion || "latest") +
+          "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(chatbot);
+      }
+    }
+  }
 
   function handleToast() {
     setToastActive(false);
@@ -115,7 +112,7 @@ export default function Foto() {
           return (
             <div className="space-y-1" key={id}>
               <h2 className="text-lg font-medium">{label}</h2>
-              {!session && "carregando"}
+
               <FileUpload category={id as keyof Photos} requirement={validationClicked && isNotValidStatus} session={session} />
             </div>
           );
@@ -134,7 +131,7 @@ export default function Foto() {
         />
       </div>
 
-      {/* {cameraAlert && <DialogAlert open={cameraAlert} block />} */}
+      {cameraAlert && <DialogAlert open={cameraAlert} block />}
     </>
   );
 }

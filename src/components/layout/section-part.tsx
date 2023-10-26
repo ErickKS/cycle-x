@@ -11,7 +11,7 @@ import { Select } from "@/components/form/select";
 import { Input } from "@/components/form/input";
 import { DialogBikeItem } from "@/components/radix/dialog";
 
-import { selectAccessory } from "@/constants/selectData";
+import { selectPart } from "@/constants/selectData";
 import { inputBikeItemsLabels } from "@/constants/inputsTypes";
 
 interface PartAlertProps {
@@ -254,7 +254,7 @@ export function Part() {
 
               <label
                 htmlFor="part"
-                tabIndex={0}
+                tabIndex={1}
                 onKeyDown={handleLabelKeyDown}
                 className={clsx(
                   "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full px-2 py-2 border-2 rounded overflow-hidden cursor-pointer outline-none transition",
@@ -283,7 +283,7 @@ export function Part() {
               onOpenChange={handleSelectState}
               onValueChange={handleSelectChange}
               value={selectedPart.type}
-              data={selectAccessory}
+              data={selectPart}
             />
 
             {inputBikeItemsLabels.map((input) => {
@@ -354,7 +354,7 @@ export function Part() {
               onValueChange={handleSelectChange}
               value={selectValuePart}
               alert={selectAlertPart}
-              data={selectAccessory}
+              data={selectPart}
             />
 
             {inputBikeItemsLabels.map((input) => {

@@ -70,47 +70,49 @@ export function DialogBikeItem({ open, setOpen, title, type, onSubmit, onDelete,
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="fixed inset-0 bg-black/40" />
 
-        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-6 w-full max-w-[432px] px-4 py-6 rounded border-2 border-primary bg-white text-black animate-fade-in sm:max-w-[450px]">
-          <div className="flex justify-between">
-            <DialogPrimitive.Title className="text-xl font-medium">
-              {type === "add" ? `Adicionar ${title}` : `Editar ${title}`}
-            </DialogPrimitive.Title>
+        <DialogPrimitive.Content className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 w-full max-w-[498px] px-4 outline-none animate-fade-in sm:px-6">
+          <div className="flex flex-col gap-6 px-4 py-6 rounded border-2 border-primary bg-white text-black">
+            <div className="flex justify-between">
+              <DialogPrimitive.Title className="text-xl font-medium">
+                {type === "add" ? `Adicionar ${title}` : `Editar ${title}`}
+              </DialogPrimitive.Title>
 
-            <DialogPrimitive.Close>
-              <X />
-            </DialogPrimitive.Close>
-          </div>
-
-          <main className="flex flex-col gap-4">{children}</main>
-
-          <footer className="flex justify-end gap-4">
-            {type === "add" ? (
-              <DialogPrimitive.Close
-                className={clsx(
-                  "flex justify-center px-5 py-2 border-2 border-transparent rounded bg-transparent outline-none transition",
-                  "text-lg font-semibold text-primary",
-                  "hover:border-primary focus:border-primary"
-                )}
-              >
-                Cancelar
+              <DialogPrimitive.Close>
+                <X />
               </DialogPrimitive.Close>
-            ) : (
-              <button
-                onClick={onDelete}
-                className={clsx(
-                  "flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent outline-none transition",
-                  "text-lg font-semibold text-red",
-                  "hover:border-red focus:border-red"
-                )}
-              >
-                Deletar
-              </button>
-            )}
+            </div>
 
-            <Button type="solid" onClick={onSubmit} customStyles="px-5">
-              {type === "add" ? "Adicionar" : "Salvar"}
-            </Button>
-          </footer>
+            <main className="flex flex-col gap-4">{children}</main>
+
+            <footer className="flex justify-end gap-4">
+              {type === "add" ? (
+                <DialogPrimitive.Close
+                  className={clsx(
+                    "flex justify-center px-5 py-2 border-2 border-transparent rounded bg-transparent outline-none transition",
+                    "text-lg font-semibold text-primary",
+                    "hover:border-primary focus:border-primary"
+                  )}
+                >
+                  Cancelar
+                </DialogPrimitive.Close>
+              ) : (
+                <button
+                  onClick={onDelete}
+                  className={clsx(
+                    "flex justify-center px-5 py-2 rounded border-2 border-transparent bg-transparent outline-none transition",
+                    "text-lg font-semibold text-red",
+                    "hover:border-red focus:border-red"
+                  )}
+                >
+                  Deletar
+                </button>
+              )}
+
+              <Button type="solid" onClick={onSubmit} customStyles="px-5">
+                {type === "add" ? "Adicionar" : "Salvar"}
+              </Button>
+            </footer>
+          </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

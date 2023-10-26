@@ -27,6 +27,7 @@ const config: Config = {
     extend: {
       boxShadow: {
         main: "0 2px 6px 1px rgba(0, 0, 0, 0.34)",
+        "inner-select": "inset 0px -10px 7px -3px rgba(197, 206, 224, 0.3);",
       },
       backgroundImage: {
         gradient: "linear-gradient(180deg, #0046C0 5.21%, #FFF 100%)",

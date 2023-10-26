@@ -19,6 +19,7 @@ export default function Detalhes() {
       <Banner.Root>
         <Banner.Title>Detalhes adicionais </Banner.Title>
         <Banner.Text>Informe sobre os acessórios ou peças personalizadas da sua bike.</Banner.Text>
+        <Banner.Alert>Lembre-se de que a foto deve destacar o acessório/peça que está sendo adicionado.</Banner.Alert>
       </Banner.Root>
 
       <div className="flex flex-col gap-6">

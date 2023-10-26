@@ -254,7 +254,7 @@ export function Accessory() {
 
               <label
                 htmlFor="accessory"
-                tabIndex={0}
+                tabIndex={1}
                 onKeyDown={handleLabelKeyDown}
                 className={clsx(
                   "relative flex flex-col items-center justify-center gap-2 h-[112px] w-full px-2 py-2 border-2 rounded overflow-hidden cursor-pointer outline-none transition",

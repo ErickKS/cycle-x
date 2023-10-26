@@ -6,9 +6,10 @@ import clsx from "clsx";
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 import { detectionResultVerification } from "@/hooks/detectionResultVerification";
 
+import { detectImage } from "@/utils/detect";
+
 import { Status, statusOfValidation } from "@/constants/statusValidation";
 import { SpinIcon } from "../spin-icon";
-import { detectImage } from "@/utils/detect";
 
 interface FileUploadProps {
   category: keyof Photos;
@@ -104,9 +105,11 @@ export function FileUpload({ category, requirement, session }: FileUploadProps) 
         data-valid={selectedPhoto.status === "valid"}
         data-invalid={selectedPhoto.status === "invalid"}
         className={clsx(
-          "relative flex flex-col items-center justify-center gap-2 h-[160px] w-full px-2 py-2 border-2 rounded overflow-hidden cursor-pointer transition",
+          "relative flex flex-col items-center justify-center gap-2 h-[160px] w-full px-2 py-2 border-2 rounded overflow-hidden transition",
           "hover:bg-primary-light focus:bg-primary-light group-focus-within:bg-primary-light",
           "data-[invalid=true]:border-red data-[valid=true]:border-green",
+          { "border-black pointer-events-none cursor-not-allowed": !session },
+          { "pointer-events-auto cursor-pointer": session },
           { "border-red": requirement },
           { "border-primary": !requirement }
         )}
@@ -125,7 +128,7 @@ export function FileUpload({ category, requirement, session }: FileUploadProps) 
               className="w-auto h-auto"
             />
 
-            <span className="text-center text-lg font-medium">Clique para ativar a câmera</span>
+            <span className="text-center text-lg font-medium">{!session ? "Inicializando..." : "Clique para ativar a câmera"}</span>
           </>
         )}
       </label>
@@ -138,7 +141,7 @@ export function FileUpload({ category, requirement, session }: FileUploadProps) 
         onChange={handleImageUpload}
         accept="image/*"
         capture="environment"
-        className="invisible absolute inset-0 cursor-pointer opacity-0"
+        className="invisible absolute inset-0 -z-10 opacity-0"
       />
 
       {selectedPhoto.status !== "waiting" && category !== "chassi" && (

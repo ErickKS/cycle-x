@@ -12,3 +12,8 @@ export const selectAccessory = {
   placeholder: "Tipo",
   item: ["Velocímetro digital", "GPS", "Ciclocomputador"],
 };
+
+export const selectPart = {
+  placeholder: "Tipo",
+  item: ["Quadro", "Rodas", "Pneus", "Selim", "Guidão", "Freios", "Transmissão", "Pedais", "Suspensão", "Manoplas", "Câmbio"],
+};
