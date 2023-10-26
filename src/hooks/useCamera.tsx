@@ -16,9 +16,11 @@ export const useCamera = create<Camera>((set) => ({
 
       mediaCamera.getTracks().forEach((track) => track.stop());
       set({ hasCamera: true });
+
       return true;
     } catch {
       set({ hasCamera: false });
+
       return false;
     }
   },

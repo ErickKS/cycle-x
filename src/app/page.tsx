@@ -11,14 +11,14 @@ import { Button } from "@/components/button";
 import { DialogAlert } from "@/components/radix/dialog";
 
 export default function Home() {
-  const { hasCamera, getCamera } = useCamera();
+  const { getCamera } = useCamera();
   const [cameraAlert, setCameraAlert] = useState(false);
   const router = useRouter();
 
   async function checkAccessToCamera() {
-    await getCamera();
+    const result = await getCamera();
 
-    if (!hasCamera) {
+    if (!result) {
       setCameraAlert(true);
       return;
     }

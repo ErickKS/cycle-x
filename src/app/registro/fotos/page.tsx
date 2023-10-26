@@ -44,9 +44,10 @@ export default function Foto() {
 
   async function initialChecks() {
     if (!hasCamera) {
-      await getCamera();
+      const result = await getCamera();
+      console.log(result);
 
-      if (!hasCamera) {
+      if (!result) {
         setCameraAlert(true);
         return;
       }
