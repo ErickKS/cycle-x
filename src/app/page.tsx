@@ -16,9 +16,9 @@ export default function Home() {
   const router = useRouter();
 
   async function checkAccessToCamera() {
-    if (!hasCamera) {
-      getCamera();
+    await getCamera();
 
+    if (!hasCamera) {
       setCameraAlert(true);
       return;
     }

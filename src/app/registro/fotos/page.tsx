@@ -44,10 +44,12 @@ export default function Foto() {
 
   async function initialChecks() {
     if (!hasCamera) {
-      getCamera();
+      await getCamera();
 
-      setCameraAlert(true);
-      return;
+      if (!hasCamera) {
+        setCameraAlert(true);
+        return;
+      }
     }
 
     if (!session) getModel();

@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface Camera {
   hasCamera: boolean;
-  getCamera: () => Promise<void>;
+  getCamera: () => Promise<boolean>;
 }
 
 export const useCamera = create<Camera>((set) => ({
@@ -16,8 +16,10 @@ export const useCamera = create<Camera>((set) => ({
 
       mediaCamera.getTracks().forEach((track) => track.stop());
       set({ hasCamera: true });
+      return true;
     } catch {
       set({ hasCamera: false });
+      return false;
     }
   },
 }));
