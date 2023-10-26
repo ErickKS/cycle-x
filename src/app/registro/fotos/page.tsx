@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 import { useCamera } from "@/hooks/useCamera";
+import { useModel } from "@/hooks/useModel";
 
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
@@ -13,7 +14,6 @@ import { Toast } from "@/components/radix/toast";
 import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
-import { useModel } from "@/hooks/useModel";
 
 declare global {
   interface Window {
@@ -39,22 +39,19 @@ export default function Foto() {
 
   useEffect(() => {
     initialChecks();
+    if (!session) getModel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function initialChecks() {
     if (!hasCamera) {
       const result = await getCamera();
-      console.log(result);
 
       if (!result) {
         setCameraAlert(true);
         return;
       }
     }
-
-    if (!session) getModel();
-
     loadChatbot();
   }
 
