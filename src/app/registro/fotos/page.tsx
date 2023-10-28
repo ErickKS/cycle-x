@@ -38,8 +38,10 @@ export default function Foto() {
   const [validationClicked, setValidationClicked] = useState(false);
 
   useEffect(() => {
-    initialChecks();
+    // initialChecks();
+
     if (!session) getModel();
+    loadChatbot();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
