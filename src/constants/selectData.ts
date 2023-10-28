@@ -5,7 +5,7 @@ export const selectBikeType = {
 
 export const selectBikeBrand = {
   placeholder: "Marca",
-  item: ["Caloi", "Sense", "Scott", "Cannondale", "Trek"],
+  item: ["Cannondale", "Caloi", "GTS M1", "Scott", "Sense", "Specialized", "Trek"],
 };
 
 export const selectAccessory = {
@@ -15,5 +15,5 @@ export const selectAccessory = {
 
 export const selectPart = {
   placeholder: "Tipo",
-  item: ["Quadro", "Rodas", "Pneus", "Selim", "Guidão", "Freios", "Transmissão", "Pedais", "Suspensão", "Manoplas", "Câmbio"],
+  item: ["Câmbio", "Freios", "Guidão", "Manoplas", "Pneus", "Pedais", "Quadro", "Rodas", "Selim", "Suspensão", "Transmissão"],
 };

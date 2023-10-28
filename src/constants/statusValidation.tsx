@@ -1,10 +1,10 @@
-import { AlertOctagon, CheckCircle2 } from "lucide-react";
+import { ScanSearch, AlertOctagon, CheckCircle2 } from "lucide-react";
 
 export type Status = "validating" | "valid" | "invalid" | "invalid-r-side" | "invalid-l-side" | "error";
 
 export const statusOfValidation: Record<Status, { icon: JSX.Element | null; text: string }> = {
   validating: {
-    icon: null,
+    icon: <ScanSearch />,
     text: "Validando...",
   },
   valid: {

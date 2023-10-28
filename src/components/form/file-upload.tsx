@@ -9,7 +9,6 @@ import { detectionResultVerification } from "@/hooks/detectionResultVerification
 import { detectImage } from "@/utils/detect";
 
 import { Status, statusOfValidation } from "@/constants/statusValidation";
-import { SpinIcon } from "../spin-icon";
 
 interface FileUploadProps {
   category: keyof Photos;
@@ -159,7 +158,7 @@ export function FileUpload({ category, requirement, session }: FileUploadProps) 
             "data-[invalid=true]:border-red data-[invalid=true]:bg-[#EABCC4]"
           )}
         >
-          {selectedPhoto.status === "validating" ? <SpinIcon /> : selectedStatus.icon}
+          {selectedStatus.icon}
 
           <span className="text-sm font-medium group-data-[invalid=true]:text-red group-data-[valid=true]:text-green">
             {selectedStatus.text}

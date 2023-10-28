@@ -117,7 +117,7 @@ export default function Dados() {
   // ========== SUBMIT STEP
   function handleClientDocs() {
     if (!isValidUser) validationUser.handleSubmit();
-    if (!isValidAddress || !submittedClientAddress) setAddressAlert(!addressAlert);
+    if (!isValidAddress || !submittedClientAddress) setAddressAlert(true);
 
     if (isValidUser && isValidAddress && submittedClientAddress) {
       const newUserData = validationUser.values as User;
@@ -175,8 +175,8 @@ export default function Dados() {
               className={clsx(
                 "flex items-center justify-between w-full p-3 border-2 rounded text-left text-lg outline-none transition",
                 "hover:bg-primary-light focus:bg-primary-light",
-                {"border-red" : addressAlert},
-                {"border-gray-light" : !addressAlert}
+                { "border-red": addressAlert },
+                { "border-gray-light": !addressAlert }
               )}
             >
               Adicionar Endereço
