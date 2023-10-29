@@ -183,7 +183,7 @@ export function Part() {
         setSelectAlertPart(true);
       }
 
-      if (!isAllPartFieldFilled && isPartTypeSelected) {
+      if (!isAllPartFieldFilled && isPartTypeSelected && !photoAlertPart) {
         const newBikePart = {
           ...newPart,
           type: selectValuePart,

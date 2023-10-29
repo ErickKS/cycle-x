@@ -183,11 +183,12 @@ export function Accessory() {
         setSelectAccessoryAlert(true);
       }
 
-      if (!isAllAccessoryFieldFilled && isAccessoryTypeSelected) {
+      if (!isAllAccessoryFieldFilled && isAccessoryTypeSelected && !photoAlertAccessory) {
         const newBikeAccessory = {
           ...newAccessory,
           type: selectAccessoryValue,
         } as Accessory;
+
         updateOrAddAccessoryData(newBikeAccessory, false);
 
         photoRef.current?.setAttribute("src", "/svg/camera.svg");

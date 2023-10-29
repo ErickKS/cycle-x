@@ -4,14 +4,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
-import { useCamera } from "@/hooks/useCamera";
 import { useModel } from "@/hooks/useModel";
 
 import { Banner } from "@/components/layout/banner";
 import { Actions } from "@/components/layout/actions";
 import { FileUpload } from "@/components/form/file-upload";
 import { Toast } from "@/components/radix/toast";
-import { DialogAlert } from "@/components/radix/dialog";
 
 import { uploadFilesComponents } from "@/constants/uploadFiles";
 
@@ -30,7 +28,6 @@ declare global {
 export default function Foto() {
   const { photos } = useFormStorage();
   const { session, getModel } = useModel();
-  const { hasCamera, getCamera } = useCamera();
   const router = useRouter();
 
   const [cameraAlert, setCameraAlert] = useState(false);
@@ -38,24 +35,10 @@ export default function Foto() {
   const [validationClicked, setValidationClicked] = useState(false);
 
   useEffect(() => {
-    // initialChecks();
-
     if (!session) getModel();
     loadChatbot();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function initialChecks() {
-    if (!hasCamera) {
-      const result = await getCamera();
-
-      if (!result) {
-        setCameraAlert(true);
-        return;
-      }
-    }
-    loadChatbot();
-  }
 
   function loadChatbot() {
     if (!cameraAlert) {
@@ -132,8 +115,6 @@ export default function Foto() {
           alert={"Certifique-se de que todas as fotos estejam anexadas e/ou válidas."}
         />
       </div>
-
-      {cameraAlert && <DialogAlert open={cameraAlert} block />}
     </>
   );
 }
