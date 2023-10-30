@@ -6,14 +6,14 @@ import clsx from "clsx";
 import { useFormStorage, Photos } from "@/hooks/useFormStorage";
 import { detectionResultVerification } from "@/hooks/detectionResultVerification";
 
-import { detectImage } from "@/utils/detect";
+import { detectImage } from "@/utils/model-detect";
 
 import { Status, statusOfValidation } from "@/constants/statusValidation";
 
 interface FileUploadProps {
   category: keyof Photos;
   requirement?: boolean;
-  session?: { net: InferenceSession; nms: InferenceSession } | null;
+  session: { net: InferenceSession; nms: InferenceSession } | null;
 }
 
 export function FileUpload({ category, requirement, session }: FileUploadProps) {

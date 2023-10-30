@@ -1,5 +1,5 @@
-export function downloadBuf(url) {
-  return new Promise((resolve, reject) => {
+export function downloadBuffer(url: string): Promise<ArrayBuffer> {
+  return new Promise((resolve: (data: ArrayBuffer) => void, reject: (error: { status: number; statusText: string }) => void) => {
     const request = new XMLHttpRequest();
 
     request.open("GET", url, true);
@@ -19,7 +19,7 @@ export function downloadBuf(url) {
 
     request.onerror = () => {
       reject({
-        status: this.status,
+        status: request.status,
         statusText: request.statusText,
       });
     };

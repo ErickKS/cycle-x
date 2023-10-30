@@ -1,15 +1,15 @@
 import Jimp from "jimp";
 import { Tensor } from "onnxruntime-web";
 
-export async function getImageTensorFromPath(path) {
-  const image = await loadImageFromPath(path.src);
+export async function getImageTensorFromPath(path: string, modelWidth: number, modelHeight: number) {
+  const image = await loadImageFromPath(path);
 
-  const imageTensor = imageDataToTensor(image);
+  const imageTensor = imageDataToTensor(image, modelWidth, modelHeight);
 
   return imageTensor;
 }
 
-async function loadImageFromPath(path) {
+async function loadImageFromPath(path: string) {
   const imageData = await Jimp.read(path).then((imageBuffer) => {
     return imageBuffer.resize(256, 256);
   });
@@ -17,7 +17,7 @@ async function loadImageFromPath(path) {
   return imageData;
 }
 
-function imageDataToTensor(image, dims) {
+function imageDataToTensor(image: Jimp, modelWidth: number, modelHeight: number) {
   const imageBufferData = image.bitmap.data;
   const [redArray, greenArray, blueArray] = new Array(new Array(), new Array(), new Array());
 
@@ -32,13 +32,13 @@ function imageDataToTensor(image, dims) {
   let i,
     l = transposedData.length;
 
-  const float32Data = new Float32Array(3 * 256 * 256); // 256x256 -> image size
+  const float32Data = new Float32Array(3 * modelWidth * modelHeight);
 
   for (i = 0; i < l; i++) {
-    float32Data[i] = transposedData[i] / 255.0;
+    float32Data[i] = transposedData[i] / 255;
   }
 
-  const inputTensor = new Tensor("float32", float32Data, dims);
+  const inputTensor = new Tensor("float32", float32Data);
 
   return inputTensor;
 }
